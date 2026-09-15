@@ -30,12 +30,12 @@ export function CredentialsModalButton({ client }: { client: any }) {
              <div className="p-6 flex flex-col gap-6">
                <CopyField 
                  label="Telegram Chat ID" 
-                 value={client.telegram || "Not configured"} 
+                 value={client.telegramChatId || "Not configured"} 
                />
                <CopyField 
                  label="Bot Token" 
-                 value={client.token === 'custom' ? client.botToken || "1234567890:ABCdefGhIJKlmNoPQRsTUVwxyZ" : "System Default"} 
-                 hidden={client.token === 'custom'} 
+                 value={client.telegramBotToken || "System Default"} 
+                 hidden={!!client.telegramBotToken} 
                />
              </div>
           </div>

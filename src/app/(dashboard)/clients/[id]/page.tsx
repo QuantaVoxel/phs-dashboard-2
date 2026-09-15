@@ -3,31 +3,29 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import Link from "next/link";
 import { CheckNowButton } from "@/components/websites/check-now-button";
 import { CopyField } from "@/components/ui/copy-field";
+import { EmptyState } from "@/components/ui/empty-state";
+import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   
-  // Mock Data for this specific client
-  const client = {
-    id,
-    name: "Acme Corp",
-    email: "hello@acme.com",
-    whatsapp: "+6281234567890",
-    telegram: "123456789",
-    token: "custom",
-    botToken: "1234567890:ABCdefGhIJKlmNoPQRsTUVwxyZ"
-  };
+  const client = await prisma.client.findUnique({
+    where: { id },
+    include: {
+      websites: true,
+      notificationLogs: {
+        orderBy: { createdAt: 'desc' },
+        take: 20
+      }
+    }
+  });
 
-  const websites = [
-    { id: "w_1", name: "Acme Corp Main", url: "acme.com", status: "ONLINE", platform: "VERCEL" },
-    { id: "w_2", name: "Acme Store", url: "shop.acme.com", status: "OFFLINE", platform: "SHOPIFY" },
-  ];
+  if (!client) {
+    return notFound();
+  }
 
-  const notifications = [
-    { id: 1, message: "Acme Store changed status to OFFLINE", time: "10:42 AM", type: "error" },
-    { id: 2, message: "Acme Corp Main package expires in 3 days", time: "09:15 AM", type: "warning" },
-    { id: 3, message: "System routine check completed", time: "YESTERDAY", type: "info" },
-  ];
+  const hasCustomToken = !!client.telegramBotToken;
 
   return (
     <div className="flex flex-col animate-in fade-in duration-500 max-w-7xl space-y-10">
@@ -42,24 +40,24 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
           <div>
             <h1 className="text-4xl font-light tracking-tight text-text-primary">{client.name}</h1>
             <div className="flex items-center gap-4 mt-3">
-              <span className="font-mono text-xs text-text-muted uppercase tracking-widest">{client.email}</span>
-              {client.whatsapp && (
+              <span className="font-mono text-xs text-text-muted uppercase tracking-widest">{client.email || 'No Email'}</span>
+              {client.whatsappNumber && (
                 <div className="flex items-center gap-1">
                   <MessageCircle className="h-3 w-3 text-text-muted" />
-                  <span className="font-mono text-[10px] text-text-secondary">{client.whatsapp}</span>
+                  <span className="font-mono text-[10px] text-text-secondary">{client.whatsappNumber}</span>
                 </div>
               )}
-              {client.telegram && (
+              {client.telegramChatId && (
                 <div className="flex items-center gap-1">
                   <Send className="h-3 w-3 text-text-muted" />
-                  <span className="font-mono text-[10px] text-text-secondary">{client.telegram}</span>
+                  <span className="font-mono text-[10px] text-text-secondary">{client.telegramChatId}</span>
                 </div>
               )}
             </div>
           </div>
           <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-text-muted">
-            <span className={`w-1.5 h-1.5 rounded-full ${client.token === 'custom' ? 'bg-success' : 'bg-text-muted'}`} />
-            {client.token === 'custom' ? 'Custom Bot Token' : 'System Default Token'}
+            <span className={`w-1.5 h-1.5 rounded-full ${hasCustomToken ? 'bg-success' : 'bg-text-muted'}`} />
+            {hasCustomToken ? 'Custom Bot Token' : 'System Default Token'}
           </div>
         </header>
       </div>
@@ -78,12 +76,12 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
           </div>
           
           <div className="border border-border flex flex-col divide-y divide-border/50">
-            {websites.map(site => (
+            {client.websites.map(site => (
               <div key={site.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-6 hover:bg-surface-hover/30 transition-colors group">
                 <div className="flex flex-col gap-1 mb-4 sm:mb-0">
                   <div className="flex items-center gap-3">
-                    <StatusBadge status={site.status as any} />
-                    <span className="font-mono text-[10px] text-text-secondary uppercase tracking-widest">{site.platform}</span>
+                    <StatusBadge status={site.status} />
+                    <span className="font-mono text-[10px] text-text-secondary uppercase tracking-widest">{site.deploymentPlatform}</span>
                   </div>
                   <div className="flex items-baseline gap-3 mt-1">
                     <span className="text-xl font-light tracking-tight text-text-primary">{site.name}</span>
@@ -99,13 +97,20 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                 </div>
               </div>
             ))}
+            {client.websites.length === 0 && (
+              <EmptyState 
+                title="No Websites" 
+                description="No websites assigned to this client." 
+                icon={<Globe className="h-6 w-6 text-text-muted" />}
+                className="py-12"
+              />
+            )}
           </div>
         </div>
 
         {/* Right Column: Notification Log & Config */}
         <div className="flex flex-col gap-10">
 
-          {/* Routing Configuration */}
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <span className="font-mono text-xs text-text-primary uppercase tracking-widest flex items-center gap-2">
@@ -113,11 +118,11 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               </span>
             </div>
             <div className="flex flex-col gap-5 p-6 border border-border bg-[#020202]">
-               {client.telegram && (
-                 <CopyField label="Telegram Chat ID" value={client.telegram} />
+               {client.telegramChatId && (
+                 <CopyField label="Telegram Chat ID" value={client.telegramChatId} />
                )}
-               {client.token === 'custom' ? (
-                 <CopyField label="Custom Bot Token" value={client.botToken} hidden={true} />
+               {hasCustomToken ? (
+                 <CopyField label="Custom Bot Token" value={client.telegramBotToken!} hidden={true} />
                ) : (
                  <div className="font-mono text-[10px] text-text-muted uppercase tracking-widest p-3 border border-border bg-surface/10 text-center">
                    Using System Default Bot
@@ -136,23 +141,33 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
           
           <div className="flex flex-col bg-[#020202] border border-border">
             <div className="flex flex-col divide-y divide-border/30 max-h-[600px] overflow-y-auto">
-              {notifications.map((notif, i) => (
+              {client.notificationLogs.map((notif) => (
                 <div key={notif.id} className="flex flex-col py-3 px-6 hover:bg-surface-hover/20 transition-colors">
                   <div className="flex items-baseline gap-3 mb-1">
-                    <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest w-16 shrink-0">{notif.time}</span>
-                    {notif.type === "error" ? (
+                    <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest w-16 shrink-0">
+                      {notif.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    {notif.type.includes("ERROR") || notif.type.includes("DOWN") || notif.type.includes("EXPIRED") ? (
                       <span className="font-mono text-[10px] text-danger uppercase tracking-widest">[ERR]</span>
-                    ) : notif.type === "warning" ? (
+                    ) : notif.type.includes("EXPIRING") || notif.type.includes("BLOCKED") ? (
                       <span className="font-mono text-[10px] text-warning uppercase tracking-widest">[WRN]</span>
                     ) : (
-                      <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">[SYS]</span>
+                      <span className="font-mono text-[10px] text-success uppercase tracking-widest">[SYS]</span>
                     )}
                   </div>
                   <div className="pl-[76px]">
-                    <p className="font-mono text-xs text-text-secondary leading-relaxed">{notif.message}</p>
+                    <p className="font-mono text-xs text-text-secondary leading-relaxed line-clamp-2" dangerouslySetInnerHTML={{ __html: notif.message }} />
                   </div>
                 </div>
               ))}
+              {client.notificationLogs.length === 0 && (
+                <EmptyState 
+                  title="No Notifications" 
+                  description="No notifications recorded." 
+                  icon={<Activity className="h-6 w-6 text-text-muted" />}
+                  className="py-12"
+                />
+              )}
             </div>
           </div>
         </div>

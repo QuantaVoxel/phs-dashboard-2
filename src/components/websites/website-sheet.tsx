@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Save, Trash2, AlertCircle } from "lucide-react";
+import { upsertWebsite, deleteWebsite } from "@/app/(dashboard)/websites/actions";
+import { getWebsiteFormOptions } from "@/app/(dashboard)/websites/form-actions";
+import { useRouter } from "next/navigation";
 
 interface WebsiteSheetProps {
   open: boolean;
@@ -13,21 +16,38 @@ interface WebsiteSheetProps {
 export function WebsiteSheet({ open, onOpenChange, initialData }: WebsiteSheetProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [options, setOptions] = useState<{ clients: any[], packages: any[] }>({ clients: [], packages: [] });
   const isEditing = !!initialData;
+  const router = useRouter();
 
   useEffect(() => {
     if (open) {
       setIsConfirmingDelete(false);
+      getWebsiteFormOptions().then(setOptions);
     }
   }, [open, initialData]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const formData = new FormData(e.currentTarget);
+      await upsertWebsite({
+        id: initialData?.id,
+        name: formData.get("name") as string,
+        url: formData.get("url") as string,
+        clientId: formData.get("clientId") as string,
+        packageId: formData.get("packageId") as string,
+        deploymentPlatform: formData.get("deploymentPlatform") as string,
+        isActive: formData.get("isActive") === "on",
+      });
       onOpenChange(false);
-    }, 1000);
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -37,10 +57,16 @@ export function WebsiteSheet({ open, onOpenChange, initialData }: WebsiteSheetPr
     }
     
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      await deleteWebsite(initialData.id);
       onOpenChange(false);
-    }, 1000);
+      router.refresh();
+      router.push("/websites");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,6 +87,7 @@ export function WebsiteSheet({ open, onOpenChange, initialData }: WebsiteSheetPr
             <div className="p-6 space-y-2">
               <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Property Name <span className="text-danger">*</span></label>
               <input 
+                name="name"
                 required 
                 defaultValue={initialData?.name}
                 placeholder="Acme Store" 
@@ -71,40 +98,72 @@ export function WebsiteSheet({ open, onOpenChange, initialData }: WebsiteSheetPr
             <div className="p-6 space-y-2">
               <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Target URL <span className="text-danger">*</span></label>
               <input 
+                name="url"
                 required
-                type="url" 
+                type="text" 
                 defaultValue={initialData?.url}
-                placeholder="https://acme.com" 
+                placeholder="acme.com" 
                 className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
               />
             </div>
 
             <div className="p-6 space-y-2">
-              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Hosting Platform</label>
-              <select 
-                defaultValue={initialData?.platform || "VERCEL"}
-                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors rounded-none appearance-none" 
-              >
-                <option value="VERCEL" className="bg-base">Vercel</option>
-                <option value="NETLIFY" className="bg-base">Netlify</option>
-                <option value="AWS" className="bg-base">AWS</option>
-                <option value="VPS" className="bg-base">VPS / Custom</option>
-                <option value="SHOPIFY" className="bg-base">Shopify</option>
-              </select>
-            </div>
-
-            <div className="p-6 space-y-2">
               <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Client Owner <span className="text-danger">*</span></label>
               <select 
+                name="clientId"
                 required
                 defaultValue={initialData?.clientId || ""}
                 className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors rounded-none appearance-none" 
               >
                 <option value="" disabled className="bg-base">Select Client Entity...</option>
-                <option value="c_1" className="bg-base">Acme Corp</option>
-                <option value="c_2" className="bg-base">Zenith LLC</option>
-                <option value="c_3" className="bg-base">Global Inc</option>
+                {options.clients.map(c => (
+                  <option key={c.id} value={c.id} className="bg-base">{c.name}</option>
+                ))}
               </select>
+            </div>
+
+            <div className="p-6 space-y-2">
+              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Service Tier <span className="text-danger">*</span></label>
+              <select 
+                name="packageId"
+                required
+                defaultValue={initialData?.packageId || ""}
+                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors rounded-none appearance-none" 
+              >
+                <option value="" disabled className="bg-base">Select Service Tier...</option>
+                {options.packages.map(p => (
+                  <option key={p.id} value={p.id} className="bg-base">{p.name} ({p.durationDays} Days)</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="p-6 space-y-2">
+              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Hosting Platform</label>
+              <select 
+                name="deploymentPlatform"
+                defaultValue={initialData?.deploymentPlatform || "VERCEL"}
+                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors rounded-none appearance-none" 
+              >
+                <option value="VERCEL" className="bg-base">Vercel</option>
+                <option value="NETLIFY" className="bg-base">Netlify</option>
+                <option value="RAILWAY" className="bg-base">Railway</option>
+                <option value="VPS" className="bg-base">VPS / Custom</option>
+                <option value="CPANEL" className="bg-base">cPanel</option>
+                <option value="OTHER" className="bg-base">Other</option>
+              </select>
+            </div>
+            
+            <div className="p-6 flex items-center justify-between">
+              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Monitoring Status</label>
+              <div className="flex items-center gap-2">
+                <input 
+                  type="checkbox" 
+                  name="isActive"
+                  defaultChecked={initialData?.isActive ?? true}
+                  className="w-4 h-4 accent-text-primary bg-transparent border-border" 
+                />
+                <span className="font-mono text-xs text-text-primary uppercase tracking-widest">Active</span>
+              </div>
             </div>
 
           </div>

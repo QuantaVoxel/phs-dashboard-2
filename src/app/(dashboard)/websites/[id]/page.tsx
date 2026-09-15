@@ -1,36 +1,37 @@
-import { ArrowLeft, Activity, Globe, Box } from "lucide-react";
+import { ArrowLeft, Globe, Activity } from "lucide-react";
 import { StatusBadge } from "@/components/ui/status-badge";
 import Link from "next/link";
 import { CheckNowButton } from "@/components/websites/check-now-button";
-import { CopyField } from "@/components/ui/copy-field";
 import { ChangeUrlModalButton } from "@/components/websites/change-url-modal";
+import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
+import { formatDistanceToNow } from "date-fns";
 
 export default async function WebsiteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   
-  // Mock Data
-  const site = {
-    id,
-    name: "Acme Store",
-    url: "shop.acme.com",
-    status: "OFFLINE",
-    platform: "SHOPIFY",
-    client: {
-      id: "c_1",
-      name: "Acme Corp",
-      email: "hello@acme.com"
-    },
-    activePackage: {
-      id: "pkg_1",
-      name: "Pro Monitoring",
-      expiresAt: "2024-12-31"
+  const site = await prisma.website.findUnique({
+    where: { id },
+    include: {
+      client: true,
+      package: true,
+      notificationLogs: {
+        orderBy: { createdAt: 'desc' },
+        take: 20
+      }
     }
-  };
+  });
 
-  const notifications = [
-    { id: 1, message: "Acme Store changed status to OFFLINE", time: "10:42 AM", type: "error" },
-    { id: 2, message: "System routine check completed", time: "YESTERDAY", type: "info" },
-  ];
+  if (!site) {
+    return notFound();
+  }
+
+  const notifications = site.notificationLogs.map((log) => ({
+    id: log.id,
+    message: log.message,
+    time: formatDistanceToNow(new Date(log.createdAt), { addSuffix: true }),
+    type: log.type.toLowerCase(),
+  }));
 
   const pulseData = Array.from({ length: 48 }, (_, i) => {
     const isError = i > 40;
@@ -55,9 +56,9 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
         <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 border-b border-border pb-6">
           <div>
             <div className="flex items-center gap-4 mb-3">
-              <StatusBadge status={site.status as any} />
+              <StatusBadge status={site.status} />
               <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest bg-surface/20 border border-border px-2 py-0.5">
-                {site.platform}
+                {site.deploymentPlatform}
               </span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-text-primary mb-2">{site.name}</h1>
@@ -65,12 +66,14 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
               <a href={`https://${site.url}`} target="_blank" rel="noreferrer" className="font-mono text-sm text-text-muted hover:text-text-primary transition-colors flex items-center gap-2 w-fit group">
                 <Globe className="h-3 w-3" /> https://{site.url}
               </a>
-              <ChangeUrlModalButton website={site} variant="outline" />
+              <ChangeUrlModalButton website={site as any} variant="outline" />
             </div>
           </div>
           <div className="flex flex-col items-end gap-3">
             <CheckNowButton websiteId={site.id} />
-            <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted">Last Check: 10 mins ago</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-text-muted">
+              Last Check: {site.lastCheckedAt ? formatDistanceToNow(site.lastCheckedAt, { addSuffix: true }) : 'Never'}
+            </span>
           </div>
         </header>
       </div>
@@ -118,11 +121,11 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
             
             <div className="flex flex-col border border-border bg-base p-6">
               <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest mb-4">Active Package</span>
-              <span className="text-xl font-light text-text-primary mb-1">{site.activePackage.name}</span>
+              <span className="text-xl font-light text-text-primary mb-1">{site.package.name}</span>
               <span className="font-mono text-xs text-warning border border-warning/30 bg-warning/10 px-2 py-0.5 w-fit mb-6">
-                Expires {site.activePackage.expiresAt}
+                Expires {site.expiresAt ? site.expiresAt.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Lifetime'}
               </span>
-              <Link href={`/packages`} className="font-mono text-[10px] text-text-primary hover:text-brand uppercase tracking-widest flex items-center gap-1 mt-auto">
+              <Link href={`/packages/${site.package.id}`} className="font-mono text-[10px] text-text-primary hover:text-brand uppercase tracking-widest flex items-center gap-1 mt-auto">
                 Manage Billing &rarr;
               </Link>
             </div>

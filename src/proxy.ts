@@ -6,7 +6,11 @@ import type { Session } from "better-auth/types";
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  if (pathname.startsWith("/login") || pathname.startsWith("/api/auth")) {
+  if (
+    pathname.startsWith("/login") || 
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/inngest")
+  ) {
     return NextResponse.next();
   }
 

@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
-import { Save, Trash2, AlertCircle } from "lucide-react";
+import { Save, Trash2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { upsertClient, deleteClient } from "@/app/(dashboard)/clients/actions";
+import { useRouter } from "next/navigation";
 
 interface ClientSheetProps {
   open: boolean;
@@ -14,6 +16,7 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const isEditing = !!initialData;
+  const router = useRouter();
 
   // Reset states when opening/closing or changing initialData
   useEffect(() => {
@@ -22,14 +25,26 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
     }
   }, [open, initialData]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: implement server action submission
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const formData = new FormData(e.currentTarget);
+      await upsertClient({
+        id: initialData?.id,
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        whatsappNumber: formData.get("whatsappNumber") as string,
+        telegramChatId: formData.get("telegramChatId") as string,
+        telegramBotToken: formData.get("telegramBotToken") as string,
+      });
       onOpenChange(false);
-    }, 1000);
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -39,11 +54,16 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
     }
     
     setIsLoading(true);
-    // TODO: implement delete action
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      await deleteClient(initialData.id);
       onOpenChange(false);
-    }, 1000);
+      router.refresh();
+      router.push("/clients");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -62,8 +82,9 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
           <div className="flex flex-col divide-y divide-border/50">
             
             <div className="p-6 space-y-2">
-              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Entity Name <span className="text-danger">*</span></label>
+              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Client Name <span className="text-danger">*</span></label>
               <input 
+                name="name"
                 required 
                 defaultValue={initialData?.name}
                 placeholder="Acme Corp" 
@@ -72,40 +93,47 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
             </div>
 
             <div className="p-6 space-y-2">
-              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Email Routing</label>
+              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Email Address</label>
               <input 
+                name="email"
                 type="email" 
                 defaultValue={initialData?.email}
-                placeholder="contact@acme.com" 
-                className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
+                placeholder="billing@acme.com" 
+                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
               />
             </div>
 
             <div className="p-6 space-y-2">
-              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">WhatsApp Routing</label>
+              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">WhatsApp Number</label>
               <input 
-                defaultValue={initialData?.whatsapp}
+                name="whatsappNumber"
+                type="tel"
+                defaultValue={initialData?.whatsappNumber}
                 placeholder="+6281234567890" 
-                className="w-full bg-transparent border-b border-border py-2 font-mono focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
+                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
               />
             </div>
 
             <div className="p-6 space-y-2">
               <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Telegram Chat ID</label>
               <input 
-                defaultValue={initialData?.telegram}
-                placeholder="123456789" 
-                className="w-full bg-transparent border-b border-border py-2 font-mono focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
+                name="telegramChatId"
+                defaultValue={initialData?.telegramChatId}
+                placeholder="-10012345678" 
+                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
               />
             </div>
 
             <div className="p-6 space-y-2">
-              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Custom Bot Token Override</label>
+              <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest flex items-center justify-between">
+                Custom Bot Token
+                <span className="text-[9px] text-text-muted/70">Optional</span>
+              </label>
               <input 
-                type="password" 
-                defaultValue={initialData?.token === 'custom' ? 'existing_token_hidden' : ''}
-                placeholder="Leave empty for sys default" 
-                className="w-full bg-transparent border-b border-border py-2 font-mono focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
+                name="telegramBotToken"
+                defaultValue={initialData?.telegramBotToken}
+                placeholder="bot12345:ABCDEF..." 
+                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
               />
             </div>
 

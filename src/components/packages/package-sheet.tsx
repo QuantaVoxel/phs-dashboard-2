@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { Save, Trash2, AlertCircle } from "lucide-react";
+import { upsertPackage, deletePackage } from "@/app/(dashboard)/packages/actions";
+import { useRouter } from "next/navigation";
 
 interface PackageSheetProps {
   open: boolean;
@@ -14,6 +16,7 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const isEditing = !!initialData;
+  const router = useRouter();
 
   useEffect(() => {
     if (open) {
@@ -21,13 +24,25 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
     }
   }, [open, initialData]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const formData = new FormData(e.currentTarget);
+      await upsertPackage({
+        id: initialData?.id,
+        name: formData.get("name") as string,
+        price: parseFloat(formData.get("price") as string) || 0,
+        durationDays: parseInt(formData.get("durationDays") as string) || 30,
+        description: formData.get("description") as string,
+      });
       onOpenChange(false);
-    }, 1000);
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -37,10 +52,16 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
     }
     
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      await deletePackage(initialData.id);
       onOpenChange(false);
-    }, 1000);
+      router.refresh();
+      router.push("/packages");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,6 +82,7 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
             <div className="p-6 space-y-2">
               <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Tier Designation <span className="text-danger">*</span></label>
               <input 
+                name="name"
                 required 
                 defaultValue={initialData?.name}
                 placeholder="Enterprise Monitor" 
@@ -73,6 +95,7 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
               <div className="flex items-center">
                 <span className="font-mono text-text-muted mr-2">Rp</span>
                 <input 
+                  name="price"
                   required
                   type="number"
                   min="0"
@@ -86,6 +109,7 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
             <div className="p-6 space-y-2">
               <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Duration (Days) <span className="text-danger">*</span></label>
               <input 
+                name="durationDays"
                 required
                 type="number"
                 min="1"
@@ -98,6 +122,7 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
             <div className="p-6 space-y-2">
               <label className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Specification / Notes</label>
               <textarea 
+                name="description"
                 defaultValue={initialData?.description}
                 placeholder="Includes 5 minute interval checks and Telegram alerts..." 
                 className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none min-h-[80px]" 
