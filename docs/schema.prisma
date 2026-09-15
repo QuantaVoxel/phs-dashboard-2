@@ -1,0 +1,218 @@
+// ==========================================
+// Client Website Management Dashboard
+// Prisma Schema — PostgreSQL
+// ==========================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- ENUMS ----------
+
+enum WebsiteStatus {
+  ONLINE
+  NOT_FOUND
+  BLOCKED
+  OFFLINE
+  ERROR
+  UNKNOWN
+}
+
+enum NotificationType {
+  WEBSITE_DOWN
+  WEBSITE_BLOCKED
+  WEBSITE_RECOVERED
+  PACKAGE_EXPIRING
+  PACKAGE_EXPIRED
+}
+
+enum NotificationRecipient {
+  CLIENT
+  ADMIN
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum DeploymentPlatform {
+  VERCEL
+  RAILWAY
+  NETLIFY
+  VPS
+  CPANEL
+  OTHER
+}
+
+// ---------- CORE MODELS ----------
+
+model Admin {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  password    String // hashed
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("admins")
+}
+
+/// Singleton table (selalu 1 row) untuk konfigurasi sistem
+model Settings {
+  id                           String   @id @default(cuid())
+  defaultTelegramBotToken      String? // fallback dipakai client yang tidak set token sendiri
+  adminTelegramBotToken        String? // dipakai untuk notifikasi ke admin
+  adminTelegramChatId          String?
+  checkIntervalMinutes         Int      @default(30)
+  packageExpiringThresholdDays Int      @default(3)
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model Client {
+  id               String   @id @default(cuid())
+  name             String
+  email            String?  @unique
+  whatsappNumber   String?
+  telegramChatId   String?
+  telegramBotToken String? // null -> pakai Settings.defaultTelegramBotToken
+  notes            String?
+  isActive         Boolean  @default(true)
+
+  websites         Website[]
+  notificationLogs NotificationLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@map("clients")
+}
+
+model Package {
+  id           String   @id @default(cuid())
+  name         String
+  price        Decimal  @db.Decimal(12, 2)
+  durationDays Int // masa aktif dalam hari
+  description  String?
+  isActive     Boolean  @default(true)
+
+  websites Website[]
+  history  WebsitePackageHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("packages")
+}
+
+model Website {
+  id     String @id @default(cuid())
+  name   String // label internal, misal "Website Toko A"
+  url    String
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id])
+
+  status             WebsiteStatus @default(UNKNOWN)
+  lastCheckedAt      DateTime?
+  lastStatusChangeAt DateTime?
+
+  deploymentPlatform DeploymentPlatform @default(OTHER)
+  deploymentInfo     String? // opsional: nama project/service di platform tsb, misal "my-app.vercel.app" project ID
+  notes              String? // keterangan bebas dari admin, misal catatan khusus soal website ini
+
+  activatedAt DateTime  @default(now())
+  expiresAt   DateTime?
+  isActive    Boolean   @default(true)
+
+  checkLogs        WebsiteCheckLog[]
+  packageHistory   WebsitePackageHistory[]
+  notificationLogs NotificationLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([status])
+  @@index([expiresAt])
+  @@map("websites")
+}
+
+/// Riwayat setiap kali website assign/ganti package.
+/// Sumber kebenaran untuk billing history & perhitungan expiresAt.
+model WebsitePackageHistory {
+  id String @id @default(cuid())
+
+  websiteId String
+  website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id])
+
+  price     Decimal  @db.Decimal(12, 2) // snapshot harga saat assign, walau harga package berubah di kemudian hari
+  startDate DateTime @default(now())
+  endDate   DateTime
+
+  createdAt DateTime @default(now())
+
+  @@index([websiteId])
+  @@map("website_package_history")
+}
+
+/// Hasil tiap pengecekan status (dijalankan job tiap 30 menit)
+model WebsiteCheckLog {
+  id String @id @default(cuid())
+
+  websiteId String
+  website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  status         WebsiteStatus
+  httpStatusCode Int?
+  responseTimeMs Int?
+  errorMessage   String?
+
+  checkedAt DateTime @default(now())
+
+  @@index([websiteId, checkedAt])
+  @@map("website_check_logs")
+}
+
+/// Jejak notifikasi Telegram yang dikirim (ke client & admin)
+model NotificationLog {
+  id String @id @default(cuid())
+
+  type          NotificationType
+  recipientType NotificationRecipient
+  recipientChatId String
+
+  websiteId String?
+  website   Website? @relation(fields: [websiteId], references: [id], onDelete: SetNull)
+
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  message String
+  status  NotificationStatus @default(PENDING)
+  sentAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([websiteId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("notification_logs")
+}
