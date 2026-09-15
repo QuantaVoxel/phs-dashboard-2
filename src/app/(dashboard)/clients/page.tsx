@@ -4,6 +4,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ClientPageClient } from "./client-page-client";
 import { EmptyState } from "@/components/ui/empty-state";
+import { ClientEditButton } from "./[id]/client-edit-button";
+import { ClientDeleteButton } from "./client-delete-button";
 
 export default async function ClientsPage() {
   const clients = await prisma.client.findMany({
@@ -54,7 +56,7 @@ export default async function ClientsPage() {
                 </div>
 
                 {/* Routing / Auth */}
-                <div className="col-span-1 lg:col-span-4 px-6 pb-6 lg:p-4 flex flex-col justify-center gap-2 lg:border-r border-border">
+                <div className="col-span-1 lg:col-span-3 px-6 pb-6 lg:p-4 flex flex-col justify-center gap-2 lg:border-r border-border">
                   <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest lg:hidden mb-1">Routing Auth</span>
                   
                   <div className="flex items-center justify-between group/row">
@@ -71,11 +73,9 @@ export default async function ClientsPage() {
                         {hasCustomToken ? 'Custom Bot Token' : 'Default Sys Token'}
                       </span>
                     </div>
-                    {hasCustomToken && (
-                      <div className="opacity-100 lg:opacity-0 group-hover/row:opacity-100 transition-opacity">
-                        <CredentialsModalButton client={client} />
-                      </div>
-                    )}
+                    <div>
+                      <CredentialsModalButton client={client} />
+                    </div>
                   </div>
                 </div>
 
@@ -89,7 +89,9 @@ export default async function ClientsPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="col-span-1 lg:col-span-2 px-6 pb-6 lg:p-4 flex items-center justify-start lg:justify-end">
+                <div className="col-span-1 lg:col-span-3 px-6 pb-6 lg:p-4 flex flex-wrap items-center justify-start lg:justify-end gap-3">
+                  <ClientDeleteButton clientId={client.id} clientName={client.name} />
+                  <ClientEditButton client={client} />
                   <Link href={`/clients/${client.id}`} className="font-mono text-xs text-text-primary hover:text-brand flex items-center gap-1 uppercase tracking-widest transition-colors">
                     Inspect <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                   </Link>

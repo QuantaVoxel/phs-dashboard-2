@@ -6,6 +6,9 @@ import { CopyField } from "@/components/ui/copy-field";
 import { EmptyState } from "@/components/ui/empty-state";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { ClientEditButton } from "./client-edit-button";
+import { AddWebsiteButton } from "./add-website-button";
+import { ClientDeleteButton } from "../client-delete-button";
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -55,9 +58,15 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-text-muted">
-            <span className={`w-1.5 h-1.5 rounded-full ${hasCustomToken ? 'bg-success' : 'bg-text-muted'}`} />
-            {hasCustomToken ? 'Custom Bot Token' : 'System Default Token'}
+          <div className="flex flex-col sm:items-end gap-3 justify-between">
+            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-text-muted">
+              <span className={`w-1.5 h-1.5 rounded-full ${hasCustomToken ? 'bg-success' : 'bg-text-muted'}`} />
+              {hasCustomToken ? 'Custom Bot Token' : 'System Default Token'}
+            </div>
+            <div className="flex items-center gap-3">
+              <ClientDeleteButton clientId={client.id} clientName={client.name} redirectAfterDelete={true} />
+              <ClientEditButton client={client} />
+            </div>
           </div>
         </header>
       </div>
@@ -70,9 +79,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             <span className="font-mono text-xs text-text-primary uppercase tracking-widest flex items-center gap-2">
               <Globe className="h-3.5 w-3.5 text-text-muted" /> Monitored Properties
             </span>
-            <button className="font-mono text-[10px] text-text-muted hover:text-text-primary uppercase tracking-widest flex items-center gap-1 transition-colors">
-              <Plus className="h-3 w-3" /> Add Website
-            </button>
+            <AddWebsiteButton clientId={client.id} />
           </div>
           
           <div className="border border-border flex flex-col divide-y divide-border/50">

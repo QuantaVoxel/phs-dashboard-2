@@ -15,6 +15,7 @@ interface ClientSheetProps {
 export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [showToken, setShowToken] = useState(false);
   const isEditing = !!initialData;
   const router = useRouter();
 
@@ -109,6 +110,8 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
                 name="whatsappNumber"
                 type="tel"
                 defaultValue={initialData?.whatsappNumber}
+                pattern="^\+?[1-9]\d{1,14}$"
+                title="Must be a valid international phone number (e.g. +6281234567890)"
                 placeholder="+6281234567890" 
                 className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
               />
@@ -119,6 +122,8 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
               <input 
                 name="telegramChatId"
                 defaultValue={initialData?.telegramChatId}
+                pattern="^-?\d+$"
+                title="Chat ID must be a number, optionally starting with a minus sign (e.g. -10012345678)"
                 placeholder="-10012345678" 
                 className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
               />
@@ -129,12 +134,22 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
                 Custom Bot Token
                 <span className="text-[9px] text-text-muted/70">Optional</span>
               </label>
-              <input 
-                name="telegramBotToken"
-                defaultValue={initialData?.telegramBotToken}
-                placeholder="bot12345:ABCDEF..." 
-                className="w-full bg-transparent border-b border-border py-2 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
-              />
+              <div className="relative">
+                <input 
+                  name="telegramBotToken"
+                  type={showToken ? "text" : "password"}
+                  defaultValue={initialData?.telegramBotToken}
+                  placeholder="bot12345:ABCDEF..." 
+                  className="w-full bg-transparent border-b border-border py-2 pr-10 font-mono text-sm focus:outline-none focus:border-text-primary transition-colors placeholder:text-text-muted/30 rounded-none" 
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowToken(!showToken)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors"
+                >
+                  {showToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
           </div>
