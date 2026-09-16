@@ -163,7 +163,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                     )}
                   </div>
                   <div className="pl-[76px]">
-                    <p className="font-mono text-xs text-text-secondary leading-relaxed line-clamp-2" dangerouslySetInnerHTML={{ __html: notif.message }} />
+                    <div className="font-mono text-xs text-text-secondary leading-relaxed line-clamp-3 whitespace-pre-wrap [&>b]:text-text-primary [&>a]:text-brand" dangerouslySetInnerHTML={{ __html: notif.message }} />
                   </div>
                 </div>
               ))}

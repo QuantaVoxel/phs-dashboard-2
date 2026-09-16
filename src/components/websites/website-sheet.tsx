@@ -6,6 +6,7 @@ import { Save, Trash2, AlertCircle } from "lucide-react";
 import { upsertWebsite, deleteWebsite } from "@/app/(dashboard)/websites/actions";
 import { getWebsiteFormOptions } from "@/app/(dashboard)/websites/form-actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface WebsiteSheetProps {
   open: boolean;
@@ -41,9 +42,11 @@ export function WebsiteSheet({ open, onOpenChange, initialData }: WebsiteSheetPr
         deploymentPlatform: formData.get("deploymentPlatform") as string,
         isActive: formData.get("isActive") === "on",
       });
+      toast.success(initialData ? "Website updated successfully." : "Website registered successfully.");
       onOpenChange(false);
       router.refresh();
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save website.");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -59,10 +62,12 @@ export function WebsiteSheet({ open, onOpenChange, initialData }: WebsiteSheetPr
     setIsLoading(true);
     try {
       await deleteWebsite(initialData.id);
+      toast.success("Website permanently deleted.");
       onOpenChange(false);
       router.refresh();
       router.push("/websites");
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete website.");
       console.error(err);
     } finally {
       setIsLoading(false);

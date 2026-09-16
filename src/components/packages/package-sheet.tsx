@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFo
 import { Save, Trash2, AlertCircle } from "lucide-react";
 import { upsertPackage, deletePackage } from "@/app/(dashboard)/packages/actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface PackageSheetProps {
   open: boolean;
@@ -36,9 +37,11 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
         durationDays: parseInt(formData.get("durationDays") as string) || 30,
         description: formData.get("description") as string,
       });
+      toast.success(initialData ? "Tier updated successfully." : "Tier created successfully.");
       onOpenChange(false);
       router.refresh();
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save tier.");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -54,10 +57,12 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
     setIsLoading(true);
     try {
       await deletePackage(initialData.id);
+      toast.success("Tier permanently deleted.");
       onOpenChange(false);
       router.refresh();
       router.push("/packages");
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete tier.");
       console.error(err);
     } finally {
       setIsLoading(false);

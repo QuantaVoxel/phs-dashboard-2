@@ -3,13 +3,30 @@
 import { useTransition } from "react";
 import { RefreshCcw } from "lucide-react";
 import { triggerGlobalCheck } from "@/app/(dashboard)/actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function CheckAllButton() {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleCheckAll = () => {
     startTransition(async () => {
-      await triggerGlobalCheck();
+      try {
+        await triggerGlobalCheck();
+        toast.success("Global uptime check queued. Dashboard will update as results arrive.");
+        
+        // Silently poll for fresh data 10 times over 30 seconds
+        let count = 0;
+        const interval = setInterval(() => {
+          router.refresh();
+          count++;
+          if (count >= 10) clearInterval(interval);
+        }, 3000);
+
+      } catch (err: any) {
+        toast.error("Failed to queue global check.");
+      }
     });
   };
 

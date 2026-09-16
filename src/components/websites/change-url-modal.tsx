@@ -2,20 +2,27 @@
 
 import { useState } from "react";
 import { Link as LinkIcon, Save } from "lucide-react";
+import { toast } from "sonner";
 
 export function ChangeUrlModalButton({ website, variant = "ghost" }: { website: any, variant?: "ghost" | "outline" }) {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(website.url);
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    // Simulate server action
-    setTimeout(() => {
-      setIsSaving(false);
+    try {
+      const { updateWebsiteUrl } = await import("@/app/(dashboard)/websites/actions");
+      await updateWebsiteUrl(website.id, url);
+      toast.success("Target URL updated successfully.");
       setOpen(false);
-    }, 1000);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update URL.");
+      console.error(err);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
