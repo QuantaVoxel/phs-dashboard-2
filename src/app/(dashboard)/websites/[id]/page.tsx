@@ -33,14 +33,30 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
     type: log.type.toLowerCase(),
   }));
 
+  const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const pulseLogs = await prisma.notificationLog.findMany({
+    where: { 
+      websiteId: id,
+      createdAt: { gte: last24h } 
+    },
+    select: { createdAt: true, type: true }
+  });
+
   const pulseData = Array.from({ length: 48 }, (_, i) => {
-    const isError = i > 40;
-    const isWarning = i === 40;
-    const height = isError ? 10 : isWarning ? 60 : 20 + Math.random() * 20;
+    const blockStart = new Date(last24h.getTime() + i * 30 * 60 * 1000);
+    const blockEnd = new Date(blockStart.getTime() + 30 * 60 * 1000);
+    
+    const logsInBlock = pulseLogs.filter(log => log.createdAt >= blockStart && log.createdAt < blockEnd);
+    
+    const hasError = logsInBlock.some(log => log.type.includes("DOWN") || log.type.includes("ERROR") || log.type.includes("EXPIRED"));
+    const hasWarning = logsInBlock.some(log => log.type.includes("BLOCKED") || log.type.includes("EXPIRING"));
+    
+    const height = hasError ? 80 : hasWarning ? 50 : 15 + Math.random() * 15;
+    
     return {
       id: i,
       height,
-      status: isError ? "error" : isWarning ? "warning" : "ok"
+      status: hasError ? "error" : hasWarning ? "warning" : "ok"
     };
   });
 
@@ -156,7 +172,7 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
                     )}
                   </div>
                   <div className="pl-[76px]">
-                    <p className="font-mono text-xs text-text-secondary leading-relaxed">{notif.message}</p>
+                    <div className="font-mono text-xs text-text-secondary leading-relaxed whitespace-pre-wrap [&>b]:text-text-primary [&>a]:text-brand [&>a]:hover:underline" dangerouslySetInnerHTML={{ __html: notif.message }} />
                   </div>
                 </div>
               ))}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Trash2, AlertTriangle } from "lucide-react";
 import { deleteClient } from "@/app/(dashboard)/clients/actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface ClientDeleteButtonProps {
   clientId: string;
@@ -20,12 +21,14 @@ export function ClientDeleteButton({ clientId, clientName, redirectAfterDelete =
     setIsLoading(true);
     try {
       await deleteClient(clientId);
+      toast.success("Client permanently deleted.");
       setOpen(false);
       router.refresh();
       if (redirectAfterDelete) {
         router.push("/clients");
       }
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete client.");
       console.error(err);
     } finally {
       setIsLoading(false);

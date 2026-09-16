@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, Users, Globe, Package, Settings, Activity, Power } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const navItems = [
   { name: "Overview", href: "/", icon: LayoutDashboard },
@@ -15,6 +18,25 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            router.push("/login");
+          }
+        }
+      });
+    } catch (error) {
+      toast.error("Failed to sign out");
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <aside className="hidden md:flex w-64 flex-col border-r border-border bg-[#020202] h-full justify-between">
@@ -58,12 +80,21 @@ export function Sidebar() {
         <div className="flex flex-col gap-3">
           <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">Active Session</span>
           <div className="flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-xs font-mono uppercase tracking-widest text-text-primary">Admin_01</span>
-              <span className="text-[10px] font-mono text-text-muted">admin@phs.com</span>
+            <div className="flex flex-col overflow-hidden mr-2">
+              <span className="text-xs font-mono uppercase tracking-widest text-text-primary truncate">
+                {session?.user?.name || "Admin"}
+              </span>
+              <span className="text-[10px] font-mono text-text-muted truncate">
+                {session?.user?.email || "admin@phs.com"}
+              </span>
             </div>
-            <button className="text-text-muted hover:text-danger transition-colors p-2 border border-border hover:border-danger hover:bg-danger/10">
-              <Power className="h-3 w-3" />
+            <button 
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="text-text-muted hover:text-danger transition-colors p-2 border border-border hover:border-danger hover:bg-danger/10 disabled:opacity-50 shrink-0"
+              title="Sign Out"
+            >
+              <Power className={`h-3 w-3 ${isLoggingOut ? 'animate-pulse' : ''}`} />
             </button>
           </div>
         </div>

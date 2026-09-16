@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFo
 import { Save, Trash2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { upsertClient, deleteClient } from "@/app/(dashboard)/clients/actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface ClientSheetProps {
   open: boolean;
@@ -39,9 +40,11 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
         telegramChatId: formData.get("telegramChatId") as string,
         telegramBotToken: formData.get("telegramBotToken") as string,
       });
+      toast.success(initialData ? "Entity updated successfully." : "Entity created successfully.");
       onOpenChange(false);
       router.refresh();
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "An error occurred while saving.");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -57,10 +60,12 @@ export function ClientSheet({ open, onOpenChange, initialData }: ClientSheetProp
     setIsLoading(true);
     try {
       await deleteClient(initialData.id);
+      toast.success("Entity permanently deleted.");
       onOpenChange(false);
       router.refresh();
       router.push("/clients");
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete entity.");
       console.error(err);
     } finally {
       setIsLoading(false);

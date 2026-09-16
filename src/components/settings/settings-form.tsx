@@ -5,6 +5,8 @@ import { upsertSettings } from "@/app/(dashboard)/settings/actions";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { toast } from "sonner";
+
 export function SettingsForm({ initialData }: { initialData: any }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isPinging, setIsPinging] = useState(false);
@@ -15,18 +17,24 @@ export function SettingsForm({ initialData }: { initialData: any }) {
     e.preventDefault();
     setIsLoading(true);
     
-    const formData = new FormData(e.currentTarget);
-    
-    await upsertSettings({
-      defaultTelegramBotToken: formData.get("defaultTelegramBotToken") as string,
-      adminTelegramBotToken: formData.get("adminTelegramBotToken") as string,
-      adminTelegramChatId: formData.get("adminTelegramChatId") as string,
-      checkIntervalMinutes: parseInt(formData.get("checkIntervalMinutes") as string) || 30,
-      packageExpiringThresholdDays: parseInt(formData.get("packageExpiringThresholdDays") as string) || 3,
-    });
-    
-    setIsLoading(false);
-    router.refresh();
+    try {
+      const formData = new FormData(e.currentTarget);
+      
+      await upsertSettings({
+        defaultTelegramBotToken: formData.get("defaultTelegramBotToken") as string,
+        adminTelegramBotToken: formData.get("adminTelegramBotToken") as string,
+        adminTelegramChatId: formData.get("adminTelegramChatId") as string,
+        checkIntervalMinutes: parseInt(formData.get("checkIntervalMinutes") as string) || 30,
+        packageExpiringThresholdDays: parseInt(formData.get("packageExpiringThresholdDays") as string) || 3,
+      });
+      
+      toast.success("Settings saved successfully.");
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save settings.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleTestPing = async () => {
@@ -36,7 +44,7 @@ export function SettingsForm({ initialData }: { initialData: any }) {
     const chatId = formData.get("adminTelegramChatId") as string;
 
     if (!botToken || !chatId) {
-      alert("Please provide both Admin Bot Token and Chat ID before testing.");
+      toast.error("Please provide both Admin Bot Token and Chat ID before testing.");
       return;
     }
 
@@ -44,9 +52,9 @@ export function SettingsForm({ initialData }: { initialData: any }) {
     try {
       const { testTelegramPing } = await import("@/app/(dashboard)/settings/actions");
       await testTelegramPing(botToken, chatId);
-      alert("Test ping successfully sent to your Telegram!");
+      toast.success("Test ping successfully sent to your Telegram!");
     } catch (err: any) {
-      alert("Failed to send test ping: " + err.message);
+      toast.error("Failed to send test ping: " + err.message);
     } finally {
       setIsPinging(false);
     }

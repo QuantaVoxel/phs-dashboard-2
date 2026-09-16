@@ -2,16 +2,24 @@
 
 import { inngest } from "@/inngest/client";
 import { revalidatePath } from "next/cache";
+import { pingWebsiteCore } from "@/lib/ping";
 
 export async function triggerWebsiteCheck(websiteId: string) {
-  await inngest.send({
-    name: "website/check.requested",
-    data: {
-      websiteId,
-    },
-  });
+  const result = await pingWebsiteCore(websiteId);
+  
+  if (result.changed) {
+    let notifyType = "";
+    if (result.newStatus === "ONLINE") notifyType = "WEBSITE_RECOVERED";
+    else if (result.newStatus === "BLOCKED") notifyType = "WEBSITE_BLOCKED";
+    else notifyType = "WEBSITE_DOWN";
+    
+    await inngest.send({
+      name: "notification/send",
+      data: { websiteId, type: notifyType }
+    });
+  }
 
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   return { success: true };
 }
 
@@ -31,6 +39,14 @@ export async function triggerGlobalCheck() {
     await inngest.send(events);
   }
 
-  revalidatePath("/");
   return { success: true };
+}
+
+export async function getRecentLogs(page: number, take: number = 10) {
+  const { prisma } = await import("@/lib/prisma");
+  return await prisma.notificationLog.findMany({
+    orderBy: { createdAt: 'desc' },
+    skip: page * take,
+    take
+  });
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Trash2, AlertTriangle } from "lucide-react";
 import { deletePackage } from "@/app/(dashboard)/packages/actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface PackageDeleteButtonProps {
   packageId: string;
@@ -20,12 +21,14 @@ export function PackageDeleteButton({ packageId, packageName, redirectAfterDelet
     setIsLoading(true);
     try {
       await deletePackage(packageId);
+      toast.success("Tier permanently deleted.");
       setOpen(false);
       router.refresh();
       if (redirectAfterDelete) {
         router.push("/packages");
       }
-    } catch (err) {
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete tier.");
       console.error(err);
     } finally {
       setIsLoading(false);
