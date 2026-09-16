@@ -134,6 +134,7 @@ export function PackageSheet({ open, onOpenChange, initialData }: PackageSheetPr
               <div className="flex items-center gap-2">
                 <input 
                   type="checkbox" 
+                  name="isActive"
                   defaultChecked={initialData?.isActive ?? true}
                   className="w-4 h-4 accent-text-primary bg-transparent border-border" 
                 />

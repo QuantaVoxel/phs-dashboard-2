@@ -66,7 +66,7 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
               <a href={`https://${site.url}`} target="_blank" rel="noreferrer" className="font-mono text-sm text-text-muted hover:text-text-primary transition-colors flex items-center gap-2 w-fit group">
                 <Globe className="h-3 w-3" /> https://{site.url}
               </a>
-              <ChangeUrlModalButton website={site as any} variant="outline" />
+              <ChangeUrlModalButton website={{ id: site.id, url: site.url }} variant="outline" />
             </div>
           </div>
           <div className="flex flex-col items-end gap-3">

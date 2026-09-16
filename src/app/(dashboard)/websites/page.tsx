@@ -8,8 +8,22 @@ import { WebsitePageClient } from "./website-page-client";
 import { formatDistanceToNow } from "date-fns";
 import { EmptyState } from "@/components/ui/empty-state";
 
-export default async function WebsitesPage() {
+export default async function WebsitesPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
+  const q = typeof resolvedParams?.q === 'string' ? resolvedParams.q : "";
+
   const websites = await prisma.website.findMany({
+    where: q ? {
+      OR: [
+        { name: { contains: q, mode: 'insensitive' } },
+        { url: { contains: q, mode: 'insensitive' } },
+        { client: { name: { contains: q, mode: 'insensitive' } } },
+      ]
+    } : {},
     include: {
       client: true,
       package: true,
@@ -71,7 +85,7 @@ export default async function WebsitesPage() {
                 <CheckNowButton websiteId={site.id} />
                 
                 <div className="flex items-center flex-wrap justify-end gap-3 sm:gap-4 mt-2 sm:mt-0">
-                  <ChangeUrlModalButton website={site as any} />
+                  <ChangeUrlModalButton website={{ id: site.id, url: site.url }} />
                   <Link href={`/websites/${site.id}`} className="font-mono text-xs text-text-primary hover:text-brand flex items-center gap-1 uppercase tracking-widest transition-colors">
                     Inspect <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -83,7 +97,7 @@ export default async function WebsitesPage() {
           {websites.length === 0 && (
             <EmptyState 
               title="No Monitored Properties" 
-              description="You have not registered any websites for uptime tracking. Add a property to begin monitoring." 
+              description={q ? `No websites match the search query "${q}".` : "You have not registered any websites for uptime tracking. Add a property to begin monitoring."}
               icon={<Search className="h-6 w-6 text-text-muted" />}
               className="border-t border-border bg-base"
             />

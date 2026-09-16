@@ -4,8 +4,6 @@ import { inngest } from "@/inngest/client";
 import { revalidatePath } from "next/cache";
 
 export async function triggerWebsiteCheck(websiteId: string) {
-  // Wait for 1 second just to simulate the delay of queuing a task in UI if needed
-  // Send the event to Inngest
   await inngest.send({
     name: "website/check.requested",
     data: {
@@ -13,8 +11,26 @@ export async function triggerWebsiteCheck(websiteId: string) {
     },
   });
 
-  // Revalidate the dashboard
   revalidatePath("/");
+  return { success: true };
+}
+
+export async function triggerGlobalCheck() {
+  const { prisma } = await import("@/lib/prisma");
   
+  const websites = await prisma.website.findMany({ 
+    where: { isActive: true },
+    select: { id: true }
+  });
+
+  if (websites.length > 0) {
+    const events = websites.map((w) => ({
+      name: "website/check.requested" as const,
+      data: { websiteId: w.id },
+    }));
+    await inngest.send(events);
+  }
+
+  revalidatePath("/");
   return { success: true };
 }

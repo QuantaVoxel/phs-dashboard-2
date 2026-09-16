@@ -4,6 +4,8 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/ui/empty-state";
 import { notFound } from "next/navigation";
+import { PackageEditButton } from "./package-edit-button";
+import { PackageDeleteButton } from "../package-delete-button";
 
 export default async function PackageDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -54,6 +56,10 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
             <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest mb-2">Commercial Terms</span>
             <span className="text-4xl font-light text-text-primary">Rp {Number(pkg.price).toLocaleString('id-ID')}</span>
             <span className="font-mono text-xs text-text-secondary uppercase tracking-widest">/ {pkg.durationDays} Days</span>
+            <div className="flex items-center gap-3 mt-4 w-full">
+              <PackageDeleteButton packageId={pkg.id} packageName={pkg.name} redirectAfterDelete={true} />
+              <PackageEditButton pkg={{ id: pkg.id, name: pkg.name, price: Number(pkg.price), durationDays: pkg.durationDays, description: pkg.description, isActive: pkg.isActive }} />
+            </div>
           </div>
         </header>
       </div>

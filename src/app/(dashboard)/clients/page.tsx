@@ -7,8 +7,21 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { ClientEditButton } from "./[id]/client-edit-button";
 import { ClientDeleteButton } from "./client-delete-button";
 
-export default async function ClientsPage() {
+export default async function ClientsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
+  const q = typeof resolvedParams?.q === 'string' ? resolvedParams.q : "";
+
   const clients = await prisma.client.findMany({
+    where: q ? {
+      OR: [
+        { name: { contains: q, mode: 'insensitive' } },
+        { email: { contains: q, mode: 'insensitive' } },
+      ]
+    } : {},
     include: {
       _count: {
         select: { websites: true, notificationLogs: true }
@@ -103,7 +116,7 @@ export default async function ClientsPage() {
           {clients.length === 0 && (
             <EmptyState 
               title="No Entities Found" 
-              description="You have not registered any client entities yet. Add a client to begin routing notifications." 
+              description={q ? `No clients match the search query "${q}".` : "You have not registered any client entities yet. Add a client to begin routing notifications."}
               icon={<Search className="h-6 w-6 text-text-muted" />}
               className="border-t border-border bg-base"
             />

@@ -2,12 +2,14 @@
 
 import { Save, BellRing, Settings2, ShieldAlert, Cpu } from "lucide-react";
 import { upsertSettings } from "@/app/(dashboard)/settings/actions";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function SettingsForm({ initialData }: { initialData: any }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isPinging, setIsPinging] = useState(false);
   const router = useRouter();
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,8 +29,31 @@ export function SettingsForm({ initialData }: { initialData: any }) {
     router.refresh();
   };
 
+  const handleTestPing = async () => {
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
+    const botToken = formData.get("adminTelegramBotToken") as string;
+    const chatId = formData.get("adminTelegramChatId") as string;
+
+    if (!botToken || !chatId) {
+      alert("Please provide both Admin Bot Token and Chat ID before testing.");
+      return;
+    }
+
+    setIsPinging(true);
+    try {
+      const { testTelegramPing } = await import("@/app/(dashboard)/settings/actions");
+      await testTelegramPing(botToken, chatId);
+      alert("Test ping successfully sent to your Telegram!");
+    } catch (err: any) {
+      alert("Failed to send test ping: " + err.message);
+    } finally {
+      setIsPinging(false);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col border border-border bg-[#020202]">
+    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col border border-border bg-[#020202]">
       {/* Section 1: Telegram Gateway */}
       <div className="grid grid-cols-1 md:grid-cols-12 border-b border-border">
         <div className="md:col-span-4 p-8 border-b md:border-b-0 md:border-r border-border bg-surface/10 flex flex-col justify-start">
@@ -93,8 +118,14 @@ export function SettingsForm({ initialData }: { initialData: any }) {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
-            <button type="button" className="flex items-center gap-2 font-mono text-xs text-text-primary hover:text-brand uppercase tracking-widest transition-colors border border-border px-4 py-2 hover:bg-surface-hover">
-              <BellRing className="h-3 w-3" /> Test Ping
+            <button 
+              type="button" 
+              onClick={handleTestPing}
+              disabled={isPinging || isLoading}
+              className="flex items-center gap-2 font-mono text-xs text-text-primary hover:text-brand uppercase tracking-widest transition-colors border border-border px-4 py-2 hover:bg-surface-hover disabled:opacity-50"
+            >
+              <BellRing className={`h-3 w-3 ${isPinging ? 'animate-bounce' : ''}`} /> 
+              {isPinging ? "Pinging..." : "Test Ping"}
             </button>
             <button disabled={isLoading} className="flex items-center gap-2 bg-text-primary text-base px-6 py-2 font-mono text-xs uppercase tracking-widest hover:bg-text-secondary transition-colors disabled:opacity-50">
               <Save className="h-3 w-3" /> Commit Changes

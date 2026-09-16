@@ -3,9 +3,24 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { PackagePageClient } from "./package-page-client";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PackageEditButton } from "./[id]/package-edit-button";
+import { PackageDeleteButton } from "./package-delete-button";
 
-export default async function PackagesPage() {
+export default async function PackagesPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
+  const q = typeof resolvedParams?.q === 'string' ? resolvedParams.q : "";
+
   const packages = await prisma.package.findMany({
+    where: q ? {
+      OR: [
+        { name: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+      ]
+    } : {},
     include: {
       _count: {
         select: { websites: true }
@@ -23,7 +38,7 @@ export default async function PackagesPage() {
             Billing packages & capacity planning
           </p>
         </div>
-        <PackagePageClient packages={packages} />
+        <PackagePageClient />
       </header>
 
       {/* Architectural Grid List */}
@@ -77,7 +92,9 @@ export default async function PackagesPage() {
                   </span>
                 </div>
                 
-                <div className="flex items-center flex-wrap justify-end gap-3 sm:gap-4 mt-2 sm:mt-0">
+                <div className="flex flex-wrap items-center justify-start lg:justify-end gap-3 mt-2 sm:mt-0">
+                  <PackageDeleteButton packageId={pkg.id} packageName={pkg.name} />
+                  <PackageEditButton pkg={{ id: pkg.id, name: pkg.name, price: Number(pkg.price), durationDays: pkg.durationDays, description: pkg.description, isActive: pkg.isActive }} />
                   <Link href={`/packages/${pkg.id}`} className="font-mono text-xs text-text-primary hover:text-brand flex items-center gap-1 uppercase tracking-widest transition-colors">
                     Inspect <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -89,7 +106,7 @@ export default async function PackagesPage() {
           {packages.length === 0 && (
             <EmptyState 
               title="No Service Tiers" 
-              description="No billing packages have been created. Define a service tier to assign to properties."
+              description={q ? `No packages match the search query "${q}".` : "No billing packages have been created. Define a service tier to assign to properties."}
               className="border-t border-border bg-base" 
             />
           )}

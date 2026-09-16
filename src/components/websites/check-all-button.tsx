@@ -2,16 +2,14 @@
 
 import { useTransition } from "react";
 import { RefreshCcw } from "lucide-react";
-// import { triggerGlobalCheck } from "@/app/(dashboard)/actions";
+import { triggerGlobalCheck } from "@/app/(dashboard)/actions";
 
 export function CheckAllButton() {
   const [isPending, startTransition] = useTransition();
 
   const handleCheckAll = () => {
     startTransition(async () => {
-      // await triggerGlobalCheck();
-      // Simulating a global check queue for now
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await triggerGlobalCheck();
     });
   };
 
