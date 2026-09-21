@@ -28,7 +28,7 @@ export const checkAllWebsitesCron = inngest.createFunction(
 
 // Job 1b: Check individual website
 export const checkWebsite = inngest.createFunction(
-  { id: "check-website", triggers: { event: "website/check.requested" }, concurrency: 50 },
+  { id: "check-website", triggers: { event: "website/check.requested" }, concurrency: 5 },
   async ({ event, step }) => {
     const { websiteId } = event.data;
 
@@ -119,7 +119,7 @@ export const checkPackageExpiryCron = inngest.createFunction(
 
 // Job 3: Notification Dispatcher
 export const dispatchNotification = inngest.createFunction(
-  { id: "dispatch-notification", triggers: { event: "notification/send" }, concurrency: 10 },
+  { id: "dispatch-notification", triggers: { event: "notification/send" }, concurrency: 5 },
   async ({ event, step }) => {
     const { websiteId, type, message } = event.data;
 
