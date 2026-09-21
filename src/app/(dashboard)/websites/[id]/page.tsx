@@ -2,7 +2,7 @@ import { ArrowLeft, Globe, Activity } from "lucide-react";
 import { StatusBadge } from "@/components/ui/status-badge";
 import Link from "next/link";
 import { CheckNowButton } from "@/components/websites/check-now-button";
-import { ChangeUrlModalButton } from "@/components/websites/change-url-modal";
+import { WebsiteEditButton } from "@/components/websites/website-edit-button";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
@@ -82,7 +82,14 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
               <a href={`https://${site.url}`} target="_blank" rel="noreferrer" className="font-mono text-sm text-text-muted hover:text-text-primary transition-colors flex items-center gap-2 w-fit group">
                 <Globe className="h-3 w-3" /> https://{site.url}
               </a>
-              <ChangeUrlModalButton website={{ id: site.id, url: site.url }} variant="outline" />
+              <WebsiteEditButton website={{ 
+                id: site.id, 
+                name: site.name, 
+                url: site.url, 
+                clientId: site.clientId, 
+                packageId: site.packageId, 
+                deploymentPlatform: site.deploymentPlatform 
+              }} />
             </div>
           </div>
           <div className="flex flex-col items-end gap-3">

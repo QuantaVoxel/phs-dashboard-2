@@ -1,7 +1,7 @@
 import { Search, ArrowRight } from "lucide-react";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { CheckNowButton } from "@/components/websites/check-now-button";
-import { ChangeUrlModalButton } from "@/components/websites/change-url-modal";
+import { WebsiteEditButton } from "@/components/websites/website-edit-button";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { WebsitePageClient } from "./website-page-client";
@@ -85,7 +85,14 @@ export default async function WebsitesPage({
                 <CheckNowButton websiteId={site.id} />
                 
                 <div className="flex items-center flex-wrap justify-end gap-3 sm:gap-4 mt-2 sm:mt-0">
-                  <ChangeUrlModalButton website={{ id: site.id, url: site.url }} />
+                  <WebsiteEditButton website={{ 
+                    id: site.id, 
+                    name: site.name, 
+                    url: site.url, 
+                    clientId: site.clientId, 
+                    packageId: site.packageId, 
+                    deploymentPlatform: site.deploymentPlatform 
+                  }} />
                   <Link href={`/websites/${site.id}`} className="font-mono text-xs text-text-primary hover:text-brand flex items-center gap-1 uppercase tracking-widest transition-colors">
                     Inspect <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                   </Link>
