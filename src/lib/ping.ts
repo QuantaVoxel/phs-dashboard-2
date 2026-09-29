@@ -1,55 +1,79 @@
 import { prisma } from "@/lib/prisma";
+import { runCheck } from "./checker";
+import { BlockSignatures } from "./checker/types";
 
 export async function pingWebsiteCore(websiteId: string) {
   const website = await prisma.website.findUnique({ where: { id: websiteId } });
   if (!website) throw new Error("Website not found");
 
-  let status: "ONLINE" | "OFFLINE" | "NOT_FOUND" | "BLOCKED" | "ERROR" | "UNKNOWN" = "ONLINE";
-  
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-    
-    const response = await fetch(`https://${website.url}`, { 
-      signal: controller.signal,
-      redirect: 'follow',
-      method: 'HEAD'
-    }).catch(err => fetch(`http://${website.url}`, {
-      signal: controller.signal,
-      redirect: 'follow',
-      method: 'HEAD'
-    }));
-    
-    clearTimeout(timeoutId);
+  // Get signatures
+  const sigs = await prisma.blockSignature.findMany({ where: { isActive: true } });
+  const signatures: BlockSignatures = {
+    ips: sigs.filter(s => s.type === 'IP').map(s => s.value),
+    hostnames: sigs.filter(s => s.type === 'HOSTNAME').map(s => s.value),
+    keywords: sigs.filter(s => s.type === 'KEYWORD').map(s => s.value),
+  };
 
-    if (!response) {
-      status = "OFFLINE";
-    } else if (response.status === 404) {
-      status = "NOT_FOUND";
-    } else if (response.status === 403) {
-      status = "BLOCKED";
-    } else if (response.status >= 500) {
-      status = "OFFLINE";
-    } else {
-      status = "ONLINE";
+  // Run the advanced checker from Global (Server)
+  const result = await runCheck(website.url, signatures);
+
+  const timestamp = new Date();
+  
+  // Log the check result
+  await prisma.websiteCheckLog.create({
+    data: {
+      websiteId,
+      status: result.status as any,
+      blockType: result.blockType as any,
+      httpStatusCode: result.httpStatus,
+      responseTimeMs: result.latencyMs,
+      errorMessage: result.errorCode,
+      checkedAt: timestamp
     }
-  } catch (error: any) {
-    if (error.name === 'AbortError') {
-      status = "ERROR";
-    } else if (error.code === 'ENOTFOUND' || error.message.includes('fetch failed')) {
-      status = "ERROR";
+  });
+
+  // Determine final status. Since this is global ping, if it's DOWN it might be truly DOWN.
+  // We'll update the website's status directly.
+  let finalStatus = result.status;
+  let blockType = result.blockType;
+
+  // But wait! What if there are active probes?
+  // We should look at recent probe results (last 10 minutes)
+  const tenMinsAgo = new Date(Date.now() - 10 * 60 * 1000);
+  const recentProbes = await prisma.probeCheckResult.findMany({
+    where: { websiteId, checkedAt: { gte: tenMinsAgo } },
+    orderBy: { checkedAt: 'desc' }
+  });
+
+  if (recentProbes.length > 0) {
+    const probe = recentProbes[0]; // Take the latest probe result
+    
+    // Aggregation Logic:
+    if ((probe.status === 'BLOCKED' || probe.status === 'OFFLINE') && result.status === 'ONLINE') {
+      finalStatus = 'BLOCKED';
+      blockType = probe.blockType as any;
+    } else if (probe.status === 'OFFLINE' && result.status === 'OFFLINE') {
+      finalStatus = 'OFFLINE';
+    } else if (probe.status === 'ONLINE' && result.status === 'ONLINE') {
+      finalStatus = 'ONLINE';
     } else {
-      status = "OFFLINE";
+      // Fallback to global
+      finalStatus = result.status;
     }
   }
 
-  const timestamp = new Date();
-  const changed = website.status !== status && website.status !== 'UNKNOWN';
+  // Update website
+  const changed = website.status !== finalStatus && website.status !== 'UNKNOWN';
 
   await prisma.website.update({
     where: { id: websiteId },
-    data: { status, lastCheckedAt: timestamp }
+    data: { 
+      status: finalStatus as any, 
+      blockType: blockType as any,
+      lastCheckedAt: timestamp,
+      ...(changed ? { lastStatusChangeAt: timestamp } : {})
+    }
   });
 
-  return { changed, newStatus: status, oldStatus: website.status };
+  return { changed, newStatus: finalStatus, oldStatus: website.status };
 }

@@ -65,7 +65,7 @@ export type Website = Prisma.WebsiteModel
 export type WebsitePackageHistory = Prisma.WebsitePackageHistoryModel
 /**
  * Model WebsiteCheckLog
- * Hasil tiap pengecekan status (dijalankan job tiap 30 menit)
+ * Hasil agregasi pengecekan status (dijalankan job tiap 30 menit)
  */
 export type WebsiteCheckLog = Prisma.WebsiteCheckLogModel
 /**
@@ -73,3 +73,18 @@ export type WebsiteCheckLog = Prisma.WebsiteCheckLogModel
  * Jejak notifikasi Telegram yang dikirim (ke client & admin)
  */
 export type NotificationLog = Prisma.NotificationLogModel
+/**
+ * Model Probe
+ * 
+ */
+export type Probe = Prisma.ProbeModel
+/**
+ * Model BlockSignature
+ * 
+ */
+export type BlockSignature = Prisma.BlockSignatureModel
+/**
+ * Model ProbeCheckResult
+ * 
+ */
+export type ProbeCheckResult = Prisma.ProbeCheckResultModel

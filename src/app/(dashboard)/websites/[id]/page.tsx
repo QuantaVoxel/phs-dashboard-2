@@ -33,6 +33,13 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
     type: log.type.toLowerCase(),
   }));
 
+  const probeChecks = await prisma.probeCheckResult.findMany({
+    where: { websiteId: id },
+    include: { probe: true },
+    orderBy: { checkedAt: 'desc' },
+    distinct: ['probeId']
+  });
+
   const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
   const pulseLogs = await prisma.notificationLog.findMany({
     where: { 
@@ -73,6 +80,11 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
           <div>
             <div className="flex items-center gap-4 mb-3">
               <StatusBadge status={site.status} />
+              {site.status === "BLOCKED" && site.blockType && (
+                <span className="font-mono text-[10px] text-purple-500 uppercase tracking-widest bg-purple-500/10 border border-purple-500/30 px-2 py-0.5">
+                  TYPE: {site.blockType}
+                </span>
+              )}
               <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest bg-surface/20 border border-border px-2 py-0.5">
                 {site.deploymentPlatform}
               </span>
@@ -130,6 +142,36 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
               ))}
             </div>
           </div>
+
+          {/* Probe Checks */}
+          {probeChecks.length > 0 && (
+            <div className="flex flex-col">
+              <span className="font-mono text-xs text-text-primary uppercase tracking-widest mb-4">
+                Probe Results (Censorship Check)
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {probeChecks.map((check) => (
+                  <div key={check.id} className="border border-border bg-base p-4 flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs text-text-primary uppercase">{check.probe?.name || 'Global Server'}</span>
+                      <StatusBadge status={check.status} />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="font-mono text-[10px] text-text-muted">ISP: {check.probe?.isp || 'Vercel / Global'}</span>
+                      {check.status === 'BLOCKED' && (
+                        <span className="font-mono text-[10px] text-purple-500 bg-purple-500/10 px-1 py-0.5 w-fit">
+                          TYPE: {check.blockType} / {check.stage}
+                        </span>
+                      )}
+                      <span className="font-mono text-[10px] text-text-muted mt-2">
+                        Last check: {formatDistanceToNow(new Date(check.checkedAt), { addSuffix: true })}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Infrastructure Context */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -61,7 +61,10 @@ export const ModelName = {
   Website: 'Website',
   WebsitePackageHistory: 'WebsitePackageHistory',
   WebsiteCheckLog: 'WebsiteCheckLog',
-  NotificationLog: 'NotificationLog'
+  NotificationLog: 'NotificationLog',
+  Probe: 'Probe',
+  BlockSignature: 'BlockSignature',
+  ProbeCheckResult: 'ProbeCheckResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -189,6 +192,7 @@ export const WebsiteScalarFieldEnum = {
   clientId: 'clientId',
   packageId: 'packageId',
   status: 'status',
+  blockType: 'blockType',
   lastCheckedAt: 'lastCheckedAt',
   lastStatusChangeAt: 'lastStatusChangeAt',
   deploymentPlatform: 'deploymentPlatform',
@@ -221,6 +225,7 @@ export const WebsiteCheckLogScalarFieldEnum = {
   id: 'id',
   websiteId: 'websiteId',
   status: 'status',
+  blockType: 'blockType',
   httpStatusCode: 'httpStatusCode',
   responseTimeMs: 'responseTimeMs',
   errorMessage: 'errorMessage',
@@ -244,6 +249,52 @@ export const NotificationLogScalarFieldEnum = {
 } as const
 
 export type NotificationLogScalarFieldEnum = (typeof NotificationLogScalarFieldEnum)[keyof typeof NotificationLogScalarFieldEnum]
+
+
+export const ProbeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isp: 'isp',
+  location: 'location',
+  tokenHash: 'tokenHash',
+  isActive: 'isActive',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProbeScalarFieldEnum = (typeof ProbeScalarFieldEnum)[keyof typeof ProbeScalarFieldEnum]
+
+
+export const BlockSignatureScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  value: 'value',
+  isp: 'isp',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlockSignatureScalarFieldEnum = (typeof BlockSignatureScalarFieldEnum)[keyof typeof BlockSignatureScalarFieldEnum]
+
+
+export const ProbeCheckResultScalarFieldEnum = {
+  id: 'id',
+  websiteId: 'websiteId',
+  probeId: 'probeId',
+  status: 'status',
+  blockType: 'blockType',
+  stage: 'stage',
+  resolvedIps: 'resolvedIps',
+  httpStatus: 'httpStatus',
+  redirectChain: 'redirectChain',
+  errorCode: 'errorCode',
+  latencyMs: 'latencyMs',
+  checkedAt: 'checkedAt'
+} as const
+
+export type ProbeCheckResultScalarFieldEnum = (typeof ProbeCheckResultScalarFieldEnum)[keyof typeof ProbeCheckResultScalarFieldEnum]
 
 
 export const SortOrder = {

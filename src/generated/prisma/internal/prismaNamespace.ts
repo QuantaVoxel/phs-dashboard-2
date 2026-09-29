@@ -407,7 +407,10 @@ export const ModelName = {
   Website: 'Website',
   WebsitePackageHistory: 'WebsitePackageHistory',
   WebsiteCheckLog: 'WebsiteCheckLog',
-  NotificationLog: 'NotificationLog'
+  NotificationLog: 'NotificationLog',
+  Probe: 'Probe',
+  BlockSignature: 'BlockSignature',
+  ProbeCheckResult: 'ProbeCheckResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -423,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "settings" | "client" | "package" | "website" | "websitePackageHistory" | "websiteCheckLog" | "notificationLog"
+    modelProps: "user" | "session" | "account" | "verification" | "settings" | "client" | "package" | "website" | "websitePackageHistory" | "websiteCheckLog" | "notificationLog" | "probe" | "blockSignature" | "probeCheckResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1241,6 +1244,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Probe: {
+      payload: Prisma.$ProbePayload<ExtArgs>
+      fields: Prisma.ProbeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProbeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProbeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>
+        }
+        findFirst: {
+          args: Prisma.ProbeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProbeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>
+        }
+        findMany: {
+          args: Prisma.ProbeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>[]
+        }
+        create: {
+          args: Prisma.ProbeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>
+        }
+        createMany: {
+          args: Prisma.ProbeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProbeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>[]
+        }
+        delete: {
+          args: Prisma.ProbeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>
+        }
+        update: {
+          args: Prisma.ProbeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProbeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProbeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProbeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>[]
+        }
+        upsert: {
+          args: Prisma.ProbeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbePayload>
+        }
+        aggregate: {
+          args: Prisma.ProbeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProbe>
+        }
+        groupBy: {
+          args: Prisma.ProbeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProbeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeCountAggregateOutputType> | number
+        }
+      }
+    }
+    BlockSignature: {
+      payload: Prisma.$BlockSignaturePayload<ExtArgs>
+      fields: Prisma.BlockSignatureFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlockSignatureFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlockSignatureFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>
+        }
+        findFirst: {
+          args: Prisma.BlockSignatureFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlockSignatureFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>
+        }
+        findMany: {
+          args: Prisma.BlockSignatureFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>[]
+        }
+        create: {
+          args: Prisma.BlockSignatureCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>
+        }
+        createMany: {
+          args: Prisma.BlockSignatureCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlockSignatureCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>[]
+        }
+        delete: {
+          args: Prisma.BlockSignatureDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>
+        }
+        update: {
+          args: Prisma.BlockSignatureUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>
+        }
+        deleteMany: {
+          args: Prisma.BlockSignatureDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlockSignatureUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlockSignatureUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>[]
+        }
+        upsert: {
+          args: Prisma.BlockSignatureUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockSignaturePayload>
+        }
+        aggregate: {
+          args: Prisma.BlockSignatureAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlockSignature>
+        }
+        groupBy: {
+          args: Prisma.BlockSignatureGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockSignatureGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlockSignatureCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockSignatureCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProbeCheckResult: {
+      payload: Prisma.$ProbeCheckResultPayload<ExtArgs>
+      fields: Prisma.ProbeCheckResultFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProbeCheckResultFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProbeCheckResultFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>
+        }
+        findFirst: {
+          args: Prisma.ProbeCheckResultFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProbeCheckResultFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>
+        }
+        findMany: {
+          args: Prisma.ProbeCheckResultFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>[]
+        }
+        create: {
+          args: Prisma.ProbeCheckResultCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>
+        }
+        createMany: {
+          args: Prisma.ProbeCheckResultCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProbeCheckResultCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>[]
+        }
+        delete: {
+          args: Prisma.ProbeCheckResultDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>
+        }
+        update: {
+          args: Prisma.ProbeCheckResultUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProbeCheckResultDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProbeCheckResultUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProbeCheckResultUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProbeCheckResultUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeCheckResultPayload>
+        }
+        aggregate: {
+          args: Prisma.ProbeCheckResultAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProbeCheckResult>
+        }
+        groupBy: {
+          args: Prisma.ProbeCheckResultGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeCheckResultGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProbeCheckResultCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeCheckResultCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1389,6 +1614,7 @@ export const WebsiteScalarFieldEnum = {
   clientId: 'clientId',
   packageId: 'packageId',
   status: 'status',
+  blockType: 'blockType',
   lastCheckedAt: 'lastCheckedAt',
   lastStatusChangeAt: 'lastStatusChangeAt',
   deploymentPlatform: 'deploymentPlatform',
@@ -1421,6 +1647,7 @@ export const WebsiteCheckLogScalarFieldEnum = {
   id: 'id',
   websiteId: 'websiteId',
   status: 'status',
+  blockType: 'blockType',
   httpStatusCode: 'httpStatusCode',
   responseTimeMs: 'responseTimeMs',
   errorMessage: 'errorMessage',
@@ -1444,6 +1671,52 @@ export const NotificationLogScalarFieldEnum = {
 } as const
 
 export type NotificationLogScalarFieldEnum = (typeof NotificationLogScalarFieldEnum)[keyof typeof NotificationLogScalarFieldEnum]
+
+
+export const ProbeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isp: 'isp',
+  location: 'location',
+  tokenHash: 'tokenHash',
+  isActive: 'isActive',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProbeScalarFieldEnum = (typeof ProbeScalarFieldEnum)[keyof typeof ProbeScalarFieldEnum]
+
+
+export const BlockSignatureScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  value: 'value',
+  isp: 'isp',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlockSignatureScalarFieldEnum = (typeof BlockSignatureScalarFieldEnum)[keyof typeof BlockSignatureScalarFieldEnum]
+
+
+export const ProbeCheckResultScalarFieldEnum = {
+  id: 'id',
+  websiteId: 'websiteId',
+  probeId: 'probeId',
+  status: 'status',
+  blockType: 'blockType',
+  stage: 'stage',
+  resolvedIps: 'resolvedIps',
+  httpStatus: 'httpStatus',
+  redirectChain: 'redirectChain',
+  errorCode: 'errorCode',
+  latencyMs: 'latencyMs',
+  checkedAt: 'checkedAt'
+} as const
+
+export type ProbeCheckResultScalarFieldEnum = (typeof ProbeCheckResultScalarFieldEnum)[keyof typeof ProbeCheckResultScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1554,6 +1827,20 @@ export type ListEnumWebsiteStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'BlockType'
+ */
+export type EnumBlockTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlockType'>
+    
+
+
+/**
+ * Reference to a field of type 'BlockType[]'
+ */
+export type ListEnumBlockTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlockType[]'>
+    
+
+
+/**
  * Reference to a field of type 'DeploymentPlatform'
  */
 export type EnumDeploymentPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeploymentPlatform'>
@@ -1606,6 +1893,20 @@ export type EnumNotificationStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'NotificationStatus[]'
  */
 export type ListEnumNotificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BlockSignatureType'
+ */
+export type EnumBlockSignatureTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlockSignatureType'>
+    
+
+
+/**
+ * Reference to a field of type 'BlockSignatureType[]'
+ */
+export type ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BlockSignatureType[]'>
     
 
 
@@ -1784,6 +2085,9 @@ export type GlobalOmitConfig = {
   websitePackageHistory?: Prisma.WebsitePackageHistoryOmit
   websiteCheckLog?: Prisma.WebsiteCheckLogOmit
   notificationLog?: Prisma.NotificationLogOmit
+  probe?: Prisma.ProbeOmit
+  blockSignature?: Prisma.BlockSignatureOmit
+  probeCheckResult?: Prisma.ProbeCheckResultOmit
 }
 
 /* Types for Logging */

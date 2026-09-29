@@ -209,6 +209,13 @@ export type EnumWebsiteStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumWebsiteStatusFilter<$PrismaModel> | $Enums.WebsiteStatus
 }
 
+export type EnumBlockTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockType | Prisma.EnumBlockTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBlockTypeNullableFilter<$PrismaModel> | $Enums.BlockType | null
+}
+
 export type EnumDeploymentPlatformFilter<$PrismaModel = never> = {
   equals?: $Enums.DeploymentPlatform | Prisma.EnumDeploymentPlatformFieldRefInput<$PrismaModel>
   in?: $Enums.DeploymentPlatform[] | Prisma.ListEnumDeploymentPlatformFieldRefInput<$PrismaModel>
@@ -224,6 +231,16 @@ export type EnumWebsiteStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumWebsiteStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumWebsiteStatusFilter<$PrismaModel>
+}
+
+export type EnumBlockTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockType | Prisma.EnumBlockTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBlockTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.BlockType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBlockTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBlockTypeNullableFilter<$PrismaModel>
 }
 
 export type EnumDeploymentPlatformWithAggregatesFilter<$PrismaModel = never> = {
@@ -312,6 +329,23 @@ export type EnumNotificationStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationStatusFilter<$PrismaModel>
+}
+
+export type EnumBlockSignatureTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockSignatureType | Prisma.EnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBlockSignatureTypeFilter<$PrismaModel> | $Enums.BlockSignatureType
+}
+
+export type EnumBlockSignatureTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockSignatureType | Prisma.EnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBlockSignatureTypeWithAggregatesFilter<$PrismaModel> | $Enums.BlockSignatureType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBlockSignatureTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBlockSignatureTypeFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -522,6 +556,13 @@ export type NestedEnumWebsiteStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumWebsiteStatusFilter<$PrismaModel> | $Enums.WebsiteStatus
 }
 
+export type NestedEnumBlockTypeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockType | Prisma.EnumBlockTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBlockTypeNullableFilter<$PrismaModel> | $Enums.BlockType | null
+}
+
 export type NestedEnumDeploymentPlatformFilter<$PrismaModel = never> = {
   equals?: $Enums.DeploymentPlatform | Prisma.EnumDeploymentPlatformFieldRefInput<$PrismaModel>
   in?: $Enums.DeploymentPlatform[] | Prisma.ListEnumDeploymentPlatformFieldRefInput<$PrismaModel>
@@ -537,6 +578,16 @@ export type NestedEnumWebsiteStatusWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumWebsiteStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumWebsiteStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumBlockTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockType | Prisma.EnumBlockTypeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.BlockType[] | Prisma.ListEnumBlockTypeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumBlockTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.BlockType | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBlockTypeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBlockTypeNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumDeploymentPlatformWithAggregatesFilter<$PrismaModel = never> = {
@@ -625,6 +676,23 @@ export type NestedEnumNotificationStatusWithAggregatesFilter<$PrismaModel = neve
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumBlockSignatureTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockSignatureType | Prisma.EnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBlockSignatureTypeFilter<$PrismaModel> | $Enums.BlockSignatureType
+}
+
+export type NestedEnumBlockSignatureTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BlockSignatureType | Prisma.EnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BlockSignatureType[] | Prisma.ListEnumBlockSignatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBlockSignatureTypeWithAggregatesFilter<$PrismaModel> | $Enums.BlockSignatureType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBlockSignatureTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBlockSignatureTypeFilter<$PrismaModel>
 }
 
 

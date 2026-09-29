@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model WebsiteCheckLog
- * Hasil tiap pengecekan status (dijalankan job tiap 30 menit)
+ * Hasil agregasi pengecekan status (dijalankan job tiap 30 menit)
  */
 export type WebsiteCheckLogModel = runtime.Types.Result.DefaultSelection<Prisma.$WebsiteCheckLogPayload>
 
@@ -40,6 +40,7 @@ export type WebsiteCheckLogMinAggregateOutputType = {
   id: string | null
   websiteId: string | null
   status: $Enums.WebsiteStatus | null
+  blockType: $Enums.BlockType | null
   httpStatusCode: number | null
   responseTimeMs: number | null
   errorMessage: string | null
@@ -50,6 +51,7 @@ export type WebsiteCheckLogMaxAggregateOutputType = {
   id: string | null
   websiteId: string | null
   status: $Enums.WebsiteStatus | null
+  blockType: $Enums.BlockType | null
   httpStatusCode: number | null
   responseTimeMs: number | null
   errorMessage: string | null
@@ -60,6 +62,7 @@ export type WebsiteCheckLogCountAggregateOutputType = {
   id: number
   websiteId: number
   status: number
+  blockType: number
   httpStatusCode: number
   responseTimeMs: number
   errorMessage: number
@@ -82,6 +85,7 @@ export type WebsiteCheckLogMinAggregateInputType = {
   id?: true
   websiteId?: true
   status?: true
+  blockType?: true
   httpStatusCode?: true
   responseTimeMs?: true
   errorMessage?: true
@@ -92,6 +96,7 @@ export type WebsiteCheckLogMaxAggregateInputType = {
   id?: true
   websiteId?: true
   status?: true
+  blockType?: true
   httpStatusCode?: true
   responseTimeMs?: true
   errorMessage?: true
@@ -102,6 +107,7 @@ export type WebsiteCheckLogCountAggregateInputType = {
   id?: true
   websiteId?: true
   status?: true
+  blockType?: true
   httpStatusCode?: true
   responseTimeMs?: true
   errorMessage?: true
@@ -199,6 +205,7 @@ export type WebsiteCheckLogGroupByOutputType = {
   id: string
   websiteId: string
   status: $Enums.WebsiteStatus
+  blockType: $Enums.BlockType | null
   httpStatusCode: number | null
   responseTimeMs: number | null
   errorMessage: string | null
@@ -232,6 +239,7 @@ export type WebsiteCheckLogWhereInput = {
   id?: Prisma.StringFilter<"WebsiteCheckLog"> | string
   websiteId?: Prisma.StringFilter<"WebsiteCheckLog"> | string
   status?: Prisma.EnumWebsiteStatusFilter<"WebsiteCheckLog"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableFilter<"WebsiteCheckLog"> | $Enums.BlockType | null
   httpStatusCode?: Prisma.IntNullableFilter<"WebsiteCheckLog"> | number | null
   responseTimeMs?: Prisma.IntNullableFilter<"WebsiteCheckLog"> | number | null
   errorMessage?: Prisma.StringNullableFilter<"WebsiteCheckLog"> | string | null
@@ -243,6 +251,7 @@ export type WebsiteCheckLogOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   websiteId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrderInput | Prisma.SortOrder
   httpStatusCode?: Prisma.SortOrderInput | Prisma.SortOrder
   responseTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -257,6 +266,7 @@ export type WebsiteCheckLogWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.WebsiteCheckLogWhereInput | Prisma.WebsiteCheckLogWhereInput[]
   websiteId?: Prisma.StringFilter<"WebsiteCheckLog"> | string
   status?: Prisma.EnumWebsiteStatusFilter<"WebsiteCheckLog"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableFilter<"WebsiteCheckLog"> | $Enums.BlockType | null
   httpStatusCode?: Prisma.IntNullableFilter<"WebsiteCheckLog"> | number | null
   responseTimeMs?: Prisma.IntNullableFilter<"WebsiteCheckLog"> | number | null
   errorMessage?: Prisma.StringNullableFilter<"WebsiteCheckLog"> | string | null
@@ -268,6 +278,7 @@ export type WebsiteCheckLogOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   websiteId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrderInput | Prisma.SortOrder
   httpStatusCode?: Prisma.SortOrderInput | Prisma.SortOrder
   responseTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -286,6 +297,7 @@ export type WebsiteCheckLogScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"WebsiteCheckLog"> | string
   websiteId?: Prisma.StringWithAggregatesFilter<"WebsiteCheckLog"> | string
   status?: Prisma.EnumWebsiteStatusWithAggregatesFilter<"WebsiteCheckLog"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableWithAggregatesFilter<"WebsiteCheckLog"> | $Enums.BlockType | null
   httpStatusCode?: Prisma.IntNullableWithAggregatesFilter<"WebsiteCheckLog"> | number | null
   responseTimeMs?: Prisma.IntNullableWithAggregatesFilter<"WebsiteCheckLog"> | number | null
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"WebsiteCheckLog"> | string | null
@@ -295,6 +307,7 @@ export type WebsiteCheckLogScalarWhereWithAggregatesInput = {
 export type WebsiteCheckLogCreateInput = {
   id?: string
   status: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   httpStatusCode?: number | null
   responseTimeMs?: number | null
   errorMessage?: string | null
@@ -306,6 +319,7 @@ export type WebsiteCheckLogUncheckedCreateInput = {
   id?: string
   websiteId: string
   status: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   httpStatusCode?: number | null
   responseTimeMs?: number | null
   errorMessage?: string | null
@@ -315,6 +329,7 @@ export type WebsiteCheckLogUncheckedCreateInput = {
 export type WebsiteCheckLogUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   httpStatusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -326,6 +341,7 @@ export type WebsiteCheckLogUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   websiteId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   httpStatusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -336,6 +352,7 @@ export type WebsiteCheckLogCreateManyInput = {
   id?: string
   websiteId: string
   status: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   httpStatusCode?: number | null
   responseTimeMs?: number | null
   errorMessage?: string | null
@@ -345,6 +362,7 @@ export type WebsiteCheckLogCreateManyInput = {
 export type WebsiteCheckLogUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   httpStatusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -355,6 +373,7 @@ export type WebsiteCheckLogUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   websiteId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   httpStatusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -375,6 +394,7 @@ export type WebsiteCheckLogCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   websiteId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrder
   httpStatusCode?: Prisma.SortOrder
   responseTimeMs?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -390,6 +410,7 @@ export type WebsiteCheckLogMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   websiteId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrder
   httpStatusCode?: Prisma.SortOrder
   responseTimeMs?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -400,6 +421,7 @@ export type WebsiteCheckLogMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   websiteId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrder
   httpStatusCode?: Prisma.SortOrder
   responseTimeMs?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -464,6 +486,7 @@ export type NullableIntFieldUpdateOperationsInput = {
 export type WebsiteCheckLogCreateWithoutWebsiteInput = {
   id?: string
   status: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   httpStatusCode?: number | null
   responseTimeMs?: number | null
   errorMessage?: string | null
@@ -473,6 +496,7 @@ export type WebsiteCheckLogCreateWithoutWebsiteInput = {
 export type WebsiteCheckLogUncheckedCreateWithoutWebsiteInput = {
   id?: string
   status: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   httpStatusCode?: number | null
   responseTimeMs?: number | null
   errorMessage?: string | null
@@ -512,6 +536,7 @@ export type WebsiteCheckLogScalarWhereInput = {
   id?: Prisma.StringFilter<"WebsiteCheckLog"> | string
   websiteId?: Prisma.StringFilter<"WebsiteCheckLog"> | string
   status?: Prisma.EnumWebsiteStatusFilter<"WebsiteCheckLog"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableFilter<"WebsiteCheckLog"> | $Enums.BlockType | null
   httpStatusCode?: Prisma.IntNullableFilter<"WebsiteCheckLog"> | number | null
   responseTimeMs?: Prisma.IntNullableFilter<"WebsiteCheckLog"> | number | null
   errorMessage?: Prisma.StringNullableFilter<"WebsiteCheckLog"> | string | null
@@ -521,6 +546,7 @@ export type WebsiteCheckLogScalarWhereInput = {
 export type WebsiteCheckLogCreateManyWebsiteInput = {
   id?: string
   status: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   httpStatusCode?: number | null
   responseTimeMs?: number | null
   errorMessage?: string | null
@@ -530,6 +556,7 @@ export type WebsiteCheckLogCreateManyWebsiteInput = {
 export type WebsiteCheckLogUpdateWithoutWebsiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   httpStatusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -539,6 +566,7 @@ export type WebsiteCheckLogUpdateWithoutWebsiteInput = {
 export type WebsiteCheckLogUncheckedUpdateWithoutWebsiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   httpStatusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -548,6 +576,7 @@ export type WebsiteCheckLogUncheckedUpdateWithoutWebsiteInput = {
 export type WebsiteCheckLogUncheckedUpdateManyWithoutWebsiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   httpStatusCode?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -560,6 +589,7 @@ export type WebsiteCheckLogSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   websiteId?: boolean
   status?: boolean
+  blockType?: boolean
   httpStatusCode?: boolean
   responseTimeMs?: boolean
   errorMessage?: boolean
@@ -571,6 +601,7 @@ export type WebsiteCheckLogSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   websiteId?: boolean
   status?: boolean
+  blockType?: boolean
   httpStatusCode?: boolean
   responseTimeMs?: boolean
   errorMessage?: boolean
@@ -582,6 +613,7 @@ export type WebsiteCheckLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   websiteId?: boolean
   status?: boolean
+  blockType?: boolean
   httpStatusCode?: boolean
   responseTimeMs?: boolean
   errorMessage?: boolean
@@ -593,13 +625,14 @@ export type WebsiteCheckLogSelectScalar = {
   id?: boolean
   websiteId?: boolean
   status?: boolean
+  blockType?: boolean
   httpStatusCode?: boolean
   responseTimeMs?: boolean
   errorMessage?: boolean
   checkedAt?: boolean
 }
 
-export type WebsiteCheckLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "websiteId" | "status" | "httpStatusCode" | "responseTimeMs" | "errorMessage" | "checkedAt", ExtArgs["result"]["websiteCheckLog"]>
+export type WebsiteCheckLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "websiteId" | "status" | "blockType" | "httpStatusCode" | "responseTimeMs" | "errorMessage" | "checkedAt", ExtArgs["result"]["websiteCheckLog"]>
 export type WebsiteCheckLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   website?: boolean | Prisma.WebsiteDefaultArgs<ExtArgs>
 }
@@ -619,6 +652,7 @@ export type $WebsiteCheckLogPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     websiteId: string
     status: $Enums.WebsiteStatus
+    blockType: $Enums.BlockType | null
     httpStatusCode: number | null
     responseTimeMs: number | null
     errorMessage: string | null
@@ -1050,6 +1084,7 @@ export interface WebsiteCheckLogFieldRefs {
   readonly id: Prisma.FieldRef<"WebsiteCheckLog", 'String'>
   readonly websiteId: Prisma.FieldRef<"WebsiteCheckLog", 'String'>
   readonly status: Prisma.FieldRef<"WebsiteCheckLog", 'WebsiteStatus'>
+  readonly blockType: Prisma.FieldRef<"WebsiteCheckLog", 'BlockType'>
   readonly httpStatusCode: Prisma.FieldRef<"WebsiteCheckLog", 'Int'>
   readonly responseTimeMs: Prisma.FieldRef<"WebsiteCheckLog", 'Int'>
   readonly errorMessage: Prisma.FieldRef<"WebsiteCheckLog", 'String'>

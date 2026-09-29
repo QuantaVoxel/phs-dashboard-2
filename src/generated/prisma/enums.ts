@@ -59,3 +59,22 @@ export const DeploymentPlatform = {
 } as const
 
 export type DeploymentPlatform = (typeof DeploymentPlatform)[keyof typeof DeploymentPlatform]
+
+
+export const BlockType = {
+  DNS: 'DNS',
+  IP: 'IP',
+  SNI: 'SNI',
+  HTTP: 'HTTP'
+} as const
+
+export type BlockType = (typeof BlockType)[keyof typeof BlockType]
+
+
+export const BlockSignatureType = {
+  IP: 'IP',
+  HOSTNAME: 'HOSTNAME',
+  KEYWORD: 'KEYWORD'
+} as const
+
+export type BlockSignatureType = (typeof BlockSignatureType)[keyof typeof BlockSignatureType]

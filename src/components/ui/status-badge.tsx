@@ -5,7 +5,7 @@ type Status = "ONLINE" | "NOT_FOUND" | "BLOCKED" | "OFFLINE" | "ERROR" | "UNKNOW
 const statusConfig: Record<Status, { label: string; dotClass: string; textClass: string }> = {
   ONLINE: { label: "Online", dotClass: "bg-success", textClass: "text-text-primary" },
   NOT_FOUND: { label: "Not Found", dotClass: "bg-warning", textClass: "text-warning" },
-  BLOCKED: { label: "Blocked", dotClass: "bg-danger", textClass: "text-danger" },
+  BLOCKED: { label: "Blocked", dotClass: "bg-purple-500", textClass: "text-purple-500" },
   OFFLINE: { label: "Offline", dotClass: "bg-danger", textClass: "text-danger" },
   ERROR: { label: "Error", dotClass: "bg-danger", textClass: "text-danger" },
   UNKNOWN: { label: "Unknown", dotClass: "bg-neutral-status", textClass: "text-text-muted" },

@@ -224,3 +224,40 @@ export const dispatchNotification = inngest.createFunction(
     return dispatchResult;
   }
 );
+
+// Job 4: Probe Aggregation
+export const aggregateProbe = inngest.createFunction(
+  { id: "aggregate-probe", triggers: { event: "website/aggregate.probe" }, concurrency: 5 },
+  async ({ event, step }) => {
+    const { websiteId } = event.data;
+
+    // We can just run the standard pingWebsiteCore. It automatically fetches recent probe results and aggregates.
+    const result = await step.run("execute-aggregated-ping", async () => {
+      const { pingWebsiteCore } = await import("@/lib/ping");
+      return await pingWebsiteCore(websiteId);
+    });
+
+    if (result.changed) {
+      let notifyType = "";
+      if (result.newStatus === "ONLINE") notifyType = "WEBSITE_RECOVERED";
+      else if (result.newStatus === "BLOCKED") notifyType = "WEBSITE_BLOCKED";
+      else notifyType = "WEBSITE_DOWN"; 
+
+      await step.sendEvent("notify-status-change", {
+        name: "notification/send",
+        data: {
+          websiteId,
+          type: notifyType, 
+        }
+      });
+    }
+
+    await step.run("revalidate-cache", async () => {
+      const { revalidatePath } = await import("next/cache");
+      revalidatePath("/", "layout");
+      return true;
+    });
+
+    return { websiteId, result };
+  }
+);

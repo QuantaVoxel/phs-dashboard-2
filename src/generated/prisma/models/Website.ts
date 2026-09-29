@@ -31,6 +31,7 @@ export type WebsiteMinAggregateOutputType = {
   clientId: string | null
   packageId: string | null
   status: $Enums.WebsiteStatus | null
+  blockType: $Enums.BlockType | null
   lastCheckedAt: Date | null
   lastStatusChangeAt: Date | null
   deploymentPlatform: $Enums.DeploymentPlatform | null
@@ -50,6 +51,7 @@ export type WebsiteMaxAggregateOutputType = {
   clientId: string | null
   packageId: string | null
   status: $Enums.WebsiteStatus | null
+  blockType: $Enums.BlockType | null
   lastCheckedAt: Date | null
   lastStatusChangeAt: Date | null
   deploymentPlatform: $Enums.DeploymentPlatform | null
@@ -69,6 +71,7 @@ export type WebsiteCountAggregateOutputType = {
   clientId: number
   packageId: number
   status: number
+  blockType: number
   lastCheckedAt: number
   lastStatusChangeAt: number
   deploymentPlatform: number
@@ -90,6 +93,7 @@ export type WebsiteMinAggregateInputType = {
   clientId?: true
   packageId?: true
   status?: true
+  blockType?: true
   lastCheckedAt?: true
   lastStatusChangeAt?: true
   deploymentPlatform?: true
@@ -109,6 +113,7 @@ export type WebsiteMaxAggregateInputType = {
   clientId?: true
   packageId?: true
   status?: true
+  blockType?: true
   lastCheckedAt?: true
   lastStatusChangeAt?: true
   deploymentPlatform?: true
@@ -128,6 +133,7 @@ export type WebsiteCountAggregateInputType = {
   clientId?: true
   packageId?: true
   status?: true
+  blockType?: true
   lastCheckedAt?: true
   lastStatusChangeAt?: true
   deploymentPlatform?: true
@@ -220,6 +226,7 @@ export type WebsiteGroupByOutputType = {
   clientId: string
   packageId: string
   status: $Enums.WebsiteStatus
+  blockType: $Enums.BlockType | null
   lastCheckedAt: Date | null
   lastStatusChangeAt: Date | null
   deploymentPlatform: $Enums.DeploymentPlatform
@@ -260,6 +267,7 @@ export type WebsiteWhereInput = {
   clientId?: Prisma.StringFilter<"Website"> | string
   packageId?: Prisma.StringFilter<"Website"> | string
   status?: Prisma.EnumWebsiteStatusFilter<"Website"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableFilter<"Website"> | $Enums.BlockType | null
   lastCheckedAt?: Prisma.DateTimeNullableFilter<"Website"> | Date | string | null
   lastStatusChangeAt?: Prisma.DateTimeNullableFilter<"Website"> | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFilter<"Website"> | $Enums.DeploymentPlatform
@@ -273,6 +281,7 @@ export type WebsiteWhereInput = {
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   package?: Prisma.XOR<Prisma.PackageScalarRelationFilter, Prisma.PackageWhereInput>
   checkLogs?: Prisma.WebsiteCheckLogListRelationFilter
+  probeResults?: Prisma.ProbeCheckResultListRelationFilter
   packageHistory?: Prisma.WebsitePackageHistoryListRelationFilter
   notificationLogs?: Prisma.NotificationLogListRelationFilter
 }
@@ -284,6 +293,7 @@ export type WebsiteOrderByWithRelationInput = {
   clientId?: Prisma.SortOrder
   packageId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrderInput | Prisma.SortOrder
   lastCheckedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastStatusChangeAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deploymentPlatform?: Prisma.SortOrder
@@ -297,6 +307,7 @@ export type WebsiteOrderByWithRelationInput = {
   client?: Prisma.ClientOrderByWithRelationInput
   package?: Prisma.PackageOrderByWithRelationInput
   checkLogs?: Prisma.WebsiteCheckLogOrderByRelationAggregateInput
+  probeResults?: Prisma.ProbeCheckResultOrderByRelationAggregateInput
   packageHistory?: Prisma.WebsitePackageHistoryOrderByRelationAggregateInput
   notificationLogs?: Prisma.NotificationLogOrderByRelationAggregateInput
 }
@@ -311,6 +322,7 @@ export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
   clientId?: Prisma.StringFilter<"Website"> | string
   packageId?: Prisma.StringFilter<"Website"> | string
   status?: Prisma.EnumWebsiteStatusFilter<"Website"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableFilter<"Website"> | $Enums.BlockType | null
   lastCheckedAt?: Prisma.DateTimeNullableFilter<"Website"> | Date | string | null
   lastStatusChangeAt?: Prisma.DateTimeNullableFilter<"Website"> | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFilter<"Website"> | $Enums.DeploymentPlatform
@@ -324,6 +336,7 @@ export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   package?: Prisma.XOR<Prisma.PackageScalarRelationFilter, Prisma.PackageWhereInput>
   checkLogs?: Prisma.WebsiteCheckLogListRelationFilter
+  probeResults?: Prisma.ProbeCheckResultListRelationFilter
   packageHistory?: Prisma.WebsitePackageHistoryListRelationFilter
   notificationLogs?: Prisma.NotificationLogListRelationFilter
 }, "id">
@@ -335,6 +348,7 @@ export type WebsiteOrderByWithAggregationInput = {
   clientId?: Prisma.SortOrder
   packageId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrderInput | Prisma.SortOrder
   lastCheckedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastStatusChangeAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deploymentPlatform?: Prisma.SortOrder
@@ -360,6 +374,7 @@ export type WebsiteScalarWhereWithAggregatesInput = {
   clientId?: Prisma.StringWithAggregatesFilter<"Website"> | string
   packageId?: Prisma.StringWithAggregatesFilter<"Website"> | string
   status?: Prisma.EnumWebsiteStatusWithAggregatesFilter<"Website"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableWithAggregatesFilter<"Website"> | $Enums.BlockType | null
   lastCheckedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Website"> | Date | string | null
   lastStatusChangeAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Website"> | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformWithAggregatesFilter<"Website"> | $Enums.DeploymentPlatform
@@ -377,6 +392,7 @@ export type WebsiteCreateInput = {
   name: string
   url: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -390,6 +406,7 @@ export type WebsiteCreateInput = {
   client: Prisma.ClientCreateNestedOneWithoutWebsitesInput
   package: Prisma.PackageCreateNestedOneWithoutWebsitesInput
   checkLogs?: Prisma.WebsiteCheckLogCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutWebsiteInput
 }
@@ -401,6 +418,7 @@ export type WebsiteUncheckedCreateInput = {
   clientId: string
   packageId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -412,6 +430,7 @@ export type WebsiteUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutWebsiteInput
 }
@@ -421,6 +440,7 @@ export type WebsiteUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -434,6 +454,7 @@ export type WebsiteUpdateInput = {
   client?: Prisma.ClientUpdateOneRequiredWithoutWebsitesNestedInput
   package?: Prisma.PackageUpdateOneRequiredWithoutWebsitesNestedInput
   checkLogs?: Prisma.WebsiteCheckLogUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUpdateManyWithoutWebsiteNestedInput
 }
@@ -445,6 +466,7 @@ export type WebsiteUncheckedUpdateInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   packageId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -456,6 +478,7 @@ export type WebsiteUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutWebsiteNestedInput
 }
@@ -467,6 +490,7 @@ export type WebsiteCreateManyInput = {
   clientId: string
   packageId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -484,6 +508,7 @@ export type WebsiteUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -503,6 +528,7 @@ export type WebsiteUncheckedUpdateManyInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   packageId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -532,6 +558,7 @@ export type WebsiteCountOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   packageId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrder
   lastCheckedAt?: Prisma.SortOrder
   lastStatusChangeAt?: Prisma.SortOrder
   deploymentPlatform?: Prisma.SortOrder
@@ -551,6 +578,7 @@ export type WebsiteMaxOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   packageId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrder
   lastCheckedAt?: Prisma.SortOrder
   lastStatusChangeAt?: Prisma.SortOrder
   deploymentPlatform?: Prisma.SortOrder
@@ -570,6 +598,7 @@ export type WebsiteMinOrderByAggregateInput = {
   clientId?: Prisma.SortOrder
   packageId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  blockType?: Prisma.SortOrder
   lastCheckedAt?: Prisma.SortOrder
   lastStatusChangeAt?: Prisma.SortOrder
   deploymentPlatform?: Prisma.SortOrder
@@ -680,6 +709,10 @@ export type EnumWebsiteStatusFieldUpdateOperationsInput = {
   set?: $Enums.WebsiteStatus
 }
 
+export type NullableEnumBlockTypeFieldUpdateOperationsInput = {
+  set?: $Enums.BlockType | null
+}
+
 export type EnumDeploymentPlatformFieldUpdateOperationsInput = {
   set?: $Enums.DeploymentPlatform
 }
@@ -728,11 +761,26 @@ export type WebsiteUpdateOneWithoutNotificationLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WebsiteUpdateToOneWithWhereWithoutNotificationLogsInput, Prisma.WebsiteUpdateWithoutNotificationLogsInput>, Prisma.WebsiteUncheckedUpdateWithoutNotificationLogsInput>
 }
 
+export type WebsiteCreateNestedOneWithoutProbeResultsInput = {
+  create?: Prisma.XOR<Prisma.WebsiteCreateWithoutProbeResultsInput, Prisma.WebsiteUncheckedCreateWithoutProbeResultsInput>
+  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutProbeResultsInput
+  connect?: Prisma.WebsiteWhereUniqueInput
+}
+
+export type WebsiteUpdateOneRequiredWithoutProbeResultsNestedInput = {
+  create?: Prisma.XOR<Prisma.WebsiteCreateWithoutProbeResultsInput, Prisma.WebsiteUncheckedCreateWithoutProbeResultsInput>
+  connectOrCreate?: Prisma.WebsiteCreateOrConnectWithoutProbeResultsInput
+  upsert?: Prisma.WebsiteUpsertWithoutProbeResultsInput
+  connect?: Prisma.WebsiteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WebsiteUpdateToOneWithWhereWithoutProbeResultsInput, Prisma.WebsiteUpdateWithoutProbeResultsInput>, Prisma.WebsiteUncheckedUpdateWithoutProbeResultsInput>
+}
+
 export type WebsiteCreateWithoutClientInput = {
   id?: string
   name: string
   url: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -745,6 +793,7 @@ export type WebsiteCreateWithoutClientInput = {
   updatedAt?: Date | string
   package: Prisma.PackageCreateNestedOneWithoutWebsitesInput
   checkLogs?: Prisma.WebsiteCheckLogCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutWebsiteInput
 }
@@ -755,6 +804,7 @@ export type WebsiteUncheckedCreateWithoutClientInput = {
   url: string
   packageId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -766,6 +816,7 @@ export type WebsiteUncheckedCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutWebsiteInput
 }
@@ -806,6 +857,7 @@ export type WebsiteScalarWhereInput = {
   clientId?: Prisma.StringFilter<"Website"> | string
   packageId?: Prisma.StringFilter<"Website"> | string
   status?: Prisma.EnumWebsiteStatusFilter<"Website"> | $Enums.WebsiteStatus
+  blockType?: Prisma.EnumBlockTypeNullableFilter<"Website"> | $Enums.BlockType | null
   lastCheckedAt?: Prisma.DateTimeNullableFilter<"Website"> | Date | string | null
   lastStatusChangeAt?: Prisma.DateTimeNullableFilter<"Website"> | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFilter<"Website"> | $Enums.DeploymentPlatform
@@ -823,6 +875,7 @@ export type WebsiteCreateWithoutPackageInput = {
   name: string
   url: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -835,6 +888,7 @@ export type WebsiteCreateWithoutPackageInput = {
   updatedAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutWebsitesInput
   checkLogs?: Prisma.WebsiteCheckLogCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutWebsiteInput
 }
@@ -845,6 +899,7 @@ export type WebsiteUncheckedCreateWithoutPackageInput = {
   url: string
   clientId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -856,6 +911,7 @@ export type WebsiteUncheckedCreateWithoutPackageInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutWebsiteInput
 }
@@ -891,6 +947,7 @@ export type WebsiteCreateWithoutPackageHistoryInput = {
   name: string
   url: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -904,6 +961,7 @@ export type WebsiteCreateWithoutPackageHistoryInput = {
   client: Prisma.ClientCreateNestedOneWithoutWebsitesInput
   package: Prisma.PackageCreateNestedOneWithoutWebsitesInput
   checkLogs?: Prisma.WebsiteCheckLogCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutWebsiteInput
 }
 
@@ -914,6 +972,7 @@ export type WebsiteUncheckedCreateWithoutPackageHistoryInput = {
   clientId: string
   packageId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -925,6 +984,7 @@ export type WebsiteUncheckedCreateWithoutPackageHistoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
@@ -949,6 +1009,7 @@ export type WebsiteUpdateWithoutPackageHistoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -962,6 +1023,7 @@ export type WebsiteUpdateWithoutPackageHistoryInput = {
   client?: Prisma.ClientUpdateOneRequiredWithoutWebsitesNestedInput
   package?: Prisma.PackageUpdateOneRequiredWithoutWebsitesNestedInput
   checkLogs?: Prisma.WebsiteCheckLogUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUpdateManyWithoutWebsiteNestedInput
 }
 
@@ -972,6 +1034,7 @@ export type WebsiteUncheckedUpdateWithoutPackageHistoryInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   packageId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -983,6 +1046,7 @@ export type WebsiteUncheckedUpdateWithoutPackageHistoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
@@ -991,6 +1055,7 @@ export type WebsiteCreateWithoutCheckLogsInput = {
   name: string
   url: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -1003,6 +1068,7 @@ export type WebsiteCreateWithoutCheckLogsInput = {
   updatedAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutWebsitesInput
   package: Prisma.PackageCreateNestedOneWithoutWebsitesInput
+  probeResults?: Prisma.ProbeCheckResultCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutWebsiteInput
 }
@@ -1014,6 +1080,7 @@ export type WebsiteUncheckedCreateWithoutCheckLogsInput = {
   clientId: string
   packageId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -1024,6 +1091,7 @@ export type WebsiteUncheckedCreateWithoutCheckLogsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  probeResults?: Prisma.ProbeCheckResultUncheckedCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedCreateNestedManyWithoutWebsiteInput
   notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutWebsiteInput
 }
@@ -1049,6 +1117,7 @@ export type WebsiteUpdateWithoutCheckLogsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1061,6 +1130,7 @@ export type WebsiteUpdateWithoutCheckLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutWebsitesNestedInput
   package?: Prisma.PackageUpdateOneRequiredWithoutWebsitesNestedInput
+  probeResults?: Prisma.ProbeCheckResultUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUpdateManyWithoutWebsiteNestedInput
 }
@@ -1072,6 +1142,7 @@ export type WebsiteUncheckedUpdateWithoutCheckLogsInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   packageId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1082,6 +1153,7 @@ export type WebsiteUncheckedUpdateWithoutCheckLogsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  probeResults?: Prisma.ProbeCheckResultUncheckedUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutWebsiteNestedInput
 }
@@ -1091,6 +1163,7 @@ export type WebsiteCreateWithoutNotificationLogsInput = {
   name: string
   url: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -1104,6 +1177,7 @@ export type WebsiteCreateWithoutNotificationLogsInput = {
   client: Prisma.ClientCreateNestedOneWithoutWebsitesInput
   package: Prisma.PackageCreateNestedOneWithoutWebsitesInput
   checkLogs?: Prisma.WebsiteCheckLogCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryCreateNestedManyWithoutWebsiteInput
 }
 
@@ -1114,6 +1188,7 @@ export type WebsiteUncheckedCreateWithoutNotificationLogsInput = {
   clientId: string
   packageId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -1125,6 +1200,7 @@ export type WebsiteUncheckedCreateWithoutNotificationLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedCreateNestedManyWithoutWebsiteInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedCreateNestedManyWithoutWebsiteInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedCreateNestedManyWithoutWebsiteInput
 }
 
@@ -1149,6 +1225,115 @@ export type WebsiteUpdateWithoutNotificationLogsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
+  lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
+  deploymentInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.ClientUpdateOneRequiredWithoutWebsitesNestedInput
+  package?: Prisma.PackageUpdateOneRequiredWithoutWebsitesNestedInput
+  checkLogs?: Prisma.WebsiteCheckLogUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUpdateManyWithoutWebsiteNestedInput
+  packageHistory?: Prisma.WebsitePackageHistoryUpdateManyWithoutWebsiteNestedInput
+}
+
+export type WebsiteUncheckedUpdateWithoutNotificationLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  packageId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
+  lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
+  deploymentInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  activatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkLogs?: Prisma.WebsiteCheckLogUncheckedUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedUpdateManyWithoutWebsiteNestedInput
+  packageHistory?: Prisma.WebsitePackageHistoryUncheckedUpdateManyWithoutWebsiteNestedInput
+}
+
+export type WebsiteCreateWithoutProbeResultsInput = {
+  id?: string
+  name: string
+  url: string
+  status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
+  lastCheckedAt?: Date | string | null
+  lastStatusChangeAt?: Date | string | null
+  deploymentPlatform?: $Enums.DeploymentPlatform
+  deploymentInfo?: string | null
+  notes?: string | null
+  activatedAt?: Date | string
+  expiresAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  client: Prisma.ClientCreateNestedOneWithoutWebsitesInput
+  package: Prisma.PackageCreateNestedOneWithoutWebsitesInput
+  checkLogs?: Prisma.WebsiteCheckLogCreateNestedManyWithoutWebsiteInput
+  packageHistory?: Prisma.WebsitePackageHistoryCreateNestedManyWithoutWebsiteInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutWebsiteInput
+}
+
+export type WebsiteUncheckedCreateWithoutProbeResultsInput = {
+  id?: string
+  name: string
+  url: string
+  clientId: string
+  packageId: string
+  status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
+  lastCheckedAt?: Date | string | null
+  lastStatusChangeAt?: Date | string | null
+  deploymentPlatform?: $Enums.DeploymentPlatform
+  deploymentInfo?: string | null
+  notes?: string | null
+  activatedAt?: Date | string
+  expiresAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  checkLogs?: Prisma.WebsiteCheckLogUncheckedCreateNestedManyWithoutWebsiteInput
+  packageHistory?: Prisma.WebsitePackageHistoryUncheckedCreateNestedManyWithoutWebsiteInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutWebsiteInput
+}
+
+export type WebsiteCreateOrConnectWithoutProbeResultsInput = {
+  where: Prisma.WebsiteWhereUniqueInput
+  create: Prisma.XOR<Prisma.WebsiteCreateWithoutProbeResultsInput, Prisma.WebsiteUncheckedCreateWithoutProbeResultsInput>
+}
+
+export type WebsiteUpsertWithoutProbeResultsInput = {
+  update: Prisma.XOR<Prisma.WebsiteUpdateWithoutProbeResultsInput, Prisma.WebsiteUncheckedUpdateWithoutProbeResultsInput>
+  create: Prisma.XOR<Prisma.WebsiteCreateWithoutProbeResultsInput, Prisma.WebsiteUncheckedCreateWithoutProbeResultsInput>
+  where?: Prisma.WebsiteWhereInput
+}
+
+export type WebsiteUpdateToOneWithWhereWithoutProbeResultsInput = {
+  where?: Prisma.WebsiteWhereInput
+  data: Prisma.XOR<Prisma.WebsiteUpdateWithoutProbeResultsInput, Prisma.WebsiteUncheckedUpdateWithoutProbeResultsInput>
+}
+
+export type WebsiteUpdateWithoutProbeResultsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1163,15 +1348,17 @@ export type WebsiteUpdateWithoutNotificationLogsInput = {
   package?: Prisma.PackageUpdateOneRequiredWithoutWebsitesNestedInput
   checkLogs?: Prisma.WebsiteCheckLogUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUpdateManyWithoutWebsiteNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutWebsiteNestedInput
 }
 
-export type WebsiteUncheckedUpdateWithoutNotificationLogsInput = {
+export type WebsiteUncheckedUpdateWithoutProbeResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   packageId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1184,6 +1371,7 @@ export type WebsiteUncheckedUpdateWithoutNotificationLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedUpdateManyWithoutWebsiteNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutWebsiteNestedInput
 }
 
 export type WebsiteCreateManyClientInput = {
@@ -1192,6 +1380,7 @@ export type WebsiteCreateManyClientInput = {
   url: string
   packageId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -1209,6 +1398,7 @@ export type WebsiteUpdateWithoutClientInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1221,6 +1411,7 @@ export type WebsiteUpdateWithoutClientInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   package?: Prisma.PackageUpdateOneRequiredWithoutWebsitesNestedInput
   checkLogs?: Prisma.WebsiteCheckLogUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUpdateManyWithoutWebsiteNestedInput
 }
@@ -1231,6 +1422,7 @@ export type WebsiteUncheckedUpdateWithoutClientInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   packageId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1242,6 +1434,7 @@ export type WebsiteUncheckedUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutWebsiteNestedInput
 }
@@ -1252,6 +1445,7 @@ export type WebsiteUncheckedUpdateManyWithoutClientInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   packageId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1270,6 +1464,7 @@ export type WebsiteCreateManyPackageInput = {
   url: string
   clientId: string
   status?: $Enums.WebsiteStatus
+  blockType?: $Enums.BlockType | null
   lastCheckedAt?: Date | string | null
   lastStatusChangeAt?: Date | string | null
   deploymentPlatform?: $Enums.DeploymentPlatform
@@ -1287,6 +1482,7 @@ export type WebsiteUpdateWithoutPackageInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1299,6 +1495,7 @@ export type WebsiteUpdateWithoutPackageInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutWebsitesNestedInput
   checkLogs?: Prisma.WebsiteCheckLogUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUpdateManyWithoutWebsiteNestedInput
 }
@@ -1309,6 +1506,7 @@ export type WebsiteUncheckedUpdateWithoutPackageInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1320,6 +1518,7 @@ export type WebsiteUncheckedUpdateWithoutPackageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkLogs?: Prisma.WebsiteCheckLogUncheckedUpdateManyWithoutWebsiteNestedInput
+  probeResults?: Prisma.ProbeCheckResultUncheckedUpdateManyWithoutWebsiteNestedInput
   packageHistory?: Prisma.WebsitePackageHistoryUncheckedUpdateManyWithoutWebsiteNestedInput
   notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutWebsiteNestedInput
 }
@@ -1330,6 +1529,7 @@ export type WebsiteUncheckedUpdateManyWithoutPackageInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumWebsiteStatusFieldUpdateOperationsInput | $Enums.WebsiteStatus
+  blockType?: Prisma.NullableEnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType | null
   lastCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastStatusChangeAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deploymentPlatform?: Prisma.EnumDeploymentPlatformFieldUpdateOperationsInput | $Enums.DeploymentPlatform
@@ -1349,12 +1549,14 @@ export type WebsiteUncheckedUpdateManyWithoutPackageInput = {
 
 export type WebsiteCountOutputType = {
   checkLogs: number
+  probeResults: number
   packageHistory: number
   notificationLogs: number
 }
 
 export type WebsiteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   checkLogs?: boolean | WebsiteCountOutputTypeCountCheckLogsArgs
+  probeResults?: boolean | WebsiteCountOutputTypeCountProbeResultsArgs
   packageHistory?: boolean | WebsiteCountOutputTypeCountPackageHistoryArgs
   notificationLogs?: boolean | WebsiteCountOutputTypeCountNotificationLogsArgs
 }
@@ -1379,6 +1581,13 @@ export type WebsiteCountOutputTypeCountCheckLogsArgs<ExtArgs extends runtime.Typ
 /**
  * WebsiteCountOutputType without action
  */
+export type WebsiteCountOutputTypeCountProbeResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProbeCheckResultWhereInput
+}
+
+/**
+ * WebsiteCountOutputType without action
+ */
 export type WebsiteCountOutputTypeCountPackageHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WebsitePackageHistoryWhereInput
 }
@@ -1398,6 +1607,7 @@ export type WebsiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   clientId?: boolean
   packageId?: boolean
   status?: boolean
+  blockType?: boolean
   lastCheckedAt?: boolean
   lastStatusChangeAt?: boolean
   deploymentPlatform?: boolean
@@ -1411,6 +1621,7 @@ export type WebsiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
   checkLogs?: boolean | Prisma.Website$checkLogsArgs<ExtArgs>
+  probeResults?: boolean | Prisma.Website$probeResultsArgs<ExtArgs>
   packageHistory?: boolean | Prisma.Website$packageHistoryArgs<ExtArgs>
   notificationLogs?: boolean | Prisma.Website$notificationLogsArgs<ExtArgs>
   _count?: boolean | Prisma.WebsiteCountOutputTypeDefaultArgs<ExtArgs>
@@ -1423,6 +1634,7 @@ export type WebsiteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   clientId?: boolean
   packageId?: boolean
   status?: boolean
+  blockType?: boolean
   lastCheckedAt?: boolean
   lastStatusChangeAt?: boolean
   deploymentPlatform?: boolean
@@ -1444,6 +1656,7 @@ export type WebsiteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   clientId?: boolean
   packageId?: boolean
   status?: boolean
+  blockType?: boolean
   lastCheckedAt?: boolean
   lastStatusChangeAt?: boolean
   deploymentPlatform?: boolean
@@ -1465,6 +1678,7 @@ export type WebsiteSelectScalar = {
   clientId?: boolean
   packageId?: boolean
   status?: boolean
+  blockType?: boolean
   lastCheckedAt?: boolean
   lastStatusChangeAt?: boolean
   deploymentPlatform?: boolean
@@ -1477,11 +1691,12 @@ export type WebsiteSelectScalar = {
   updatedAt?: boolean
 }
 
-export type WebsiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "url" | "clientId" | "packageId" | "status" | "lastCheckedAt" | "lastStatusChangeAt" | "deploymentPlatform" | "deploymentInfo" | "notes" | "activatedAt" | "expiresAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["website"]>
+export type WebsiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "url" | "clientId" | "packageId" | "status" | "blockType" | "lastCheckedAt" | "lastStatusChangeAt" | "deploymentPlatform" | "deploymentInfo" | "notes" | "activatedAt" | "expiresAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["website"]>
 export type WebsiteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   package?: boolean | Prisma.PackageDefaultArgs<ExtArgs>
   checkLogs?: boolean | Prisma.Website$checkLogsArgs<ExtArgs>
+  probeResults?: boolean | Prisma.Website$probeResultsArgs<ExtArgs>
   packageHistory?: boolean | Prisma.Website$packageHistoryArgs<ExtArgs>
   notificationLogs?: boolean | Prisma.Website$notificationLogsArgs<ExtArgs>
   _count?: boolean | Prisma.WebsiteCountOutputTypeDefaultArgs<ExtArgs>
@@ -1501,6 +1716,7 @@ export type $WebsitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     client: Prisma.$ClientPayload<ExtArgs>
     package: Prisma.$PackagePayload<ExtArgs>
     checkLogs: Prisma.$WebsiteCheckLogPayload<ExtArgs>[]
+    probeResults: Prisma.$ProbeCheckResultPayload<ExtArgs>[]
     packageHistory: Prisma.$WebsitePackageHistoryPayload<ExtArgs>[]
     notificationLogs: Prisma.$NotificationLogPayload<ExtArgs>[]
   }
@@ -1511,6 +1727,7 @@ export type $WebsitePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     clientId: string
     packageId: string
     status: $Enums.WebsiteStatus
+    blockType: $Enums.BlockType | null
     lastCheckedAt: Date | null
     lastStatusChangeAt: Date | null
     deploymentPlatform: $Enums.DeploymentPlatform
@@ -1918,6 +2135,7 @@ export interface Prisma__WebsiteClient<T, Null = never, ExtArgs extends runtime.
   client<T extends Prisma.ClientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientDefaultArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   package<T extends Prisma.PackageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PackageDefaultArgs<ExtArgs>>): Prisma.Prisma__PackageClient<runtime.Types.Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   checkLogs<T extends Prisma.Website$checkLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$checkLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebsiteCheckLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  probeResults<T extends Prisma.Website$probeResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$probeResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProbeCheckResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   packageHistory<T extends Prisma.Website$packageHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$packageHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebsitePackageHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationLogs<T extends Prisma.Website$notificationLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Website$notificationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1955,6 +2173,7 @@ export interface WebsiteFieldRefs {
   readonly clientId: Prisma.FieldRef<"Website", 'String'>
   readonly packageId: Prisma.FieldRef<"Website", 'String'>
   readonly status: Prisma.FieldRef<"Website", 'WebsiteStatus'>
+  readonly blockType: Prisma.FieldRef<"Website", 'BlockType'>
   readonly lastCheckedAt: Prisma.FieldRef<"Website", 'DateTime'>
   readonly lastStatusChangeAt: Prisma.FieldRef<"Website", 'DateTime'>
   readonly deploymentPlatform: Prisma.FieldRef<"Website", 'DeploymentPlatform'>
@@ -2387,6 +2606,30 @@ export type Website$checkLogsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.WebsiteCheckLogScalarFieldEnum | Prisma.WebsiteCheckLogScalarFieldEnum[]
+}
+
+/**
+ * Website.probeResults
+ */
+export type Website$probeResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProbeCheckResult
+   */
+  select?: Prisma.ProbeCheckResultSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProbeCheckResult
+   */
+  omit?: Prisma.ProbeCheckResultOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProbeCheckResultInclude<ExtArgs> | null
+  where?: Prisma.ProbeCheckResultWhereInput
+  orderBy?: Prisma.ProbeCheckResultOrderByWithRelationInput | Prisma.ProbeCheckResultOrderByWithRelationInput[]
+  cursor?: Prisma.ProbeCheckResultWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProbeCheckResultScalarFieldEnum | Prisma.ProbeCheckResultScalarFieldEnum[]
 }
 
 /**
